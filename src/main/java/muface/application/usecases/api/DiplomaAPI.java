@@ -1,6 +1,5 @@
 package muface.application.usecases.api;
 
-import muface.application.domain.valueobject.DiplomaDTO;
 import muface.arch.controller.ArqBaseRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,8 @@ public class DiplomaAPI extends ArqBaseRestController {
     /** pesonalized endpoints **/
 
     @PostMapping("saludar")
-    public ResponseEntity<Object> besarMimano(@RequestBody DiplomaDTO dtoInBody) {
-        return this.executeCreateUseCaseWithInputBody("CasoDeusoNuevoa1211", dtoInBody);
-    }
-    @PostMapping("creacionNueva")
-    public ResponseEntity<Object> crearNovedoso(@RequestBody DiplomaDTO dtoInBody) {
-        return this.executeCreateUseCaseWithInputBody("CasoUsoCrearNovedoso", dtoInBody);
+    public ResponseEntity<Object> saludar(@RequestParam String param1, @RequestParam String param2) {
+        return this.executeUseCaseWithReqParams("CasoUsoSaludoEspecial", new Object[]{param1, param2});
     }
 
 

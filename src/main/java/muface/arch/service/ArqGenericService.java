@@ -1,8 +1,6 @@
 package muface.arch.service;
 
 import muface.arch.command.IArqDTOMapper;
-import muface.arch.configuration.ArqConfigProperties;
-import muface.arch.configuration.ArqSessionInterceptor;
 import muface.arch.command.IArqDTO;
 import muface.arch.exceptions.ArqBaseOperationsException;
 import muface.arch.exceptions.NotExistException;
@@ -13,7 +11,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
@@ -24,21 +21,15 @@ import java.util.*;
 @Transactional
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
-    @Autowired
-    ArqConfigProperties arqConfigProperties;
 
     @Autowired
     private IArqDTOMapper<Serializable, D> mapper;
-
     @Autowired
-    protected ApplicationContext applicationContext;
-
+    MessageSource messageSource;
+    @Autowired
     Map<String, ArqPortRepository<?, ID>> commandRepositories;
 
     public abstract String getRepositoryEntityOfDTO();
-
-    @Autowired
-    MessageSource messageSource;
 
     protected Object getRepositorio() {
         return getRepository().getRepoImplementation();
@@ -58,33 +49,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                 new Object[]{"Error recuperando repositorio de la entidad " + entityClassName});
     }
-
-
-    @Autowired
-    public ArqGenericService(Map<String, ArqPortRepository<?, ID>> repositories) {
-        this.commandRepositories = repositories;
-    }
-
-    private String fabricarIdUnico(String applicationId, String almacen, Object id) {
-        return applicationId + "-" + almacen + "-" + (id.toString());
-    }
-
-    private void registrarEvento(Serializable entity, String eventType, ID id) {
-        if (entity != null && arqConfigProperties.isEventBrokerActive()) {
-            String applicationId = (String) ArqSessionInterceptor.getCurrentSession().getAttribute("applicationId");
-            String sessionId = (String) ArqSessionInterceptor.getCurrentSession().getAttribute("sessionId");
-            String traceId = (String) ArqSessionInterceptor.getCurrentSession().getAttribute("sessionId");
-            String almacen = getClassOfDTO();
-            String idUnique = fabricarIdUnico(applicationId, almacen, id);
-        }
-    }
-    private void registrarEventos(List<Object> entities, String eventType) {
-        entities.forEach((entity) -> {
-            D dto = mapper.map((Serializable) entity);
-            registrarEvento((Serializable) entity, eventType, (ID) dto.getId());
-        });
-    }
-
 
     @Override
     @Transactional

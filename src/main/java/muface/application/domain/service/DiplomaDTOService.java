@@ -1,7 +1,6 @@
 package muface.application.domain.service;
 
 import muface.application.domain.repository.DiplomaRepository;
-import muface.arch.repository.ArqPortRepository;
 import muface.arch.service.ArqGenericService;
 import muface.application.domain.valueobject.DiplomaDTO;
 import muface.application.domain.model.Diploma;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DiplomaDTOService extends ArqGenericService<DiplomaDTO, Long> {
@@ -19,10 +17,6 @@ public class DiplomaDTOService extends ArqGenericService<DiplomaDTO, Long> {
     @Override
     public String getRepositoryEntityOfDTO() {
         return Diploma.class.getName();
-    }
-
-    public DiplomaDTOService(Map<String, ArqPortRepository<?, Long>> repositories) {
-        super(repositories);
     }
 
     /*** métodos personalizados ***/

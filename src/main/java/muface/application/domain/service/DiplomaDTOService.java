@@ -14,11 +14,6 @@ import java.util.List;
 @Service
 public class DiplomaDTOService extends ArqGenericService<DiplomaDTO, Long> {
 
-    @Override
-    public String getRepositoryEntityOfDTO() {
-        return Diploma.class.getName();
-    }
-
     /*** métodos personalizados ***/
 
     public List<DiplomaDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion) {

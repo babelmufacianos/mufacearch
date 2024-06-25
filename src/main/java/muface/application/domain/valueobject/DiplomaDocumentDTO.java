@@ -14,11 +14,8 @@ public class DiplomaDocumentDTO implements IArqDTO<String, DiplomaDocument> {
     private String regionOComarca;
     private String titulacion;
 
-
     /** campo calculado transient que no está en el modelo (entidad-relacional o document-non-relational) **/
     private String continente;
-
-    //private DiplomaDocument diploma = new DiplomaDocument();
 
     public void setId(String id) {
         this.id = id;

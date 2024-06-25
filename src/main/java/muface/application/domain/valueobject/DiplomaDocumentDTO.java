@@ -3,14 +3,17 @@ package muface.application.domain.valueobject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import muface.arch.command.IArqDTO;
 import muface.application.domain.model.DiplomaDocument;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DiplomaDocumentDTO implements IArqDTO<String, DiplomaDocument> {
 
     private String id;
     private Long idCliente;
     private String nombreCompleto;
-    private String titulacion;
     private String regionOComarca;
+    private String titulacion;
+
 
     /** campo calculado transient que no está en el modelo (entidad-relacional o document-non-relational) **/
     private String continente;
@@ -56,15 +59,18 @@ public class DiplomaDocumentDTO implements IArqDTO<String, DiplomaDocument> {
         diploma.setId(this.id);
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);
+        diploma.setTitulo(this.titulacion);
         diploma.setRegion(this.regionOComarca);
         return diploma;
     }
 
     @Override
-    public void actualizarEntidad(DiplomaDocument entidadBBDD) {
-        entidadBBDD.setIdcustomer(this.idCliente);
-        entidadBBDD.setName(this.nombreCompleto);
-        entidadBBDD.setRegion(this.regionOComarca);
+    public void actualizarEntidad(DiplomaDocument diploma) {
+        diploma.setId(this.id);
+        diploma.setIdcustomer(this.idCliente);
+        diploma.setName(this.nombreCompleto);
+        diploma.setTitulo(this.titulacion);
+        diploma.setRegion(this.regionOComarca);
     }
 
 }

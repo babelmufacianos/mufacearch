@@ -4,8 +4,6 @@ import muface.arch.command.IArqDTOMapper;
 import muface.arch.configuration.ArqConfigProperties;
 import muface.arch.configuration.ArqSessionInterceptor;
 import muface.arch.command.IArqDTO;
-import muface.arch.event.ArqEvent;
-import muface.arch.event.futuro.publishers.ArqCommandEventPublisherPort;
 import muface.arch.exceptions.ArqBaseOperationsException;
 import muface.arch.exceptions.NotExistException;
 import muface.arch.repository.ArqPortRepository;
@@ -28,9 +26,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
     @Autowired
     ArqConfigProperties arqConfigProperties;
-
-    @Autowired(required = false)
-    ArqCommandEventPublisherPort arqCommandEventPublisherPort;
 
     @Autowired
     private IArqDTOMapper<Serializable, D> mapper;
@@ -81,8 +76,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             String traceId = (String) ArqSessionInterceptor.getCurrentSession().getAttribute("sessionId");
             String almacen = getClassOfDTO();
             String idUnique = fabricarIdUnico(applicationId, almacen, id);
-            ArqEvent eventArch = new ArqEvent(applicationId, almacen, eventType, sessionId, traceId, idUnique, entity);
-            arqCommandEventPublisherPort.publish(ArqEvent.TOPIC_AUDITORIAS, eventArch);
         }
     }
     private void registrarEventos(List<Object> entities, String eventType) {
@@ -102,7 +95,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             Serializable entidad = (Serializable) entityDto.getEntity();
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
             dto = mapper.map(entityInserted);
-            this.registrarEvento(entityInserted, ArqEvent.EVENT_TYPE_CREATE, (ID) entityDto.getId());
             String info = messageSource.getMessage(ArqConstantMessages.CREATED_OK,
                     new Object[]{getClassOfDTO()}, new Locale("es"));
             logger.info(info);
@@ -129,7 +121,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                 Serializable searchedInBBDD = (Serializable) optionalT.orElse(null);
                 entityDto.actualizarEntidad(searchedInBBDD); //actualiza los campos que no son ids
                 Serializable updated = (Serializable) commandRepo.save(searchedInBBDD);
-                this.registrarEvento(updated, ArqEvent.EVENT_TYPE_UPDATE, (ID) entityDto.getId());
                 String info = messageSource.getMessage(ArqConstantMessages.UPDATED_OK,
                         new Object[]{getClassOfDTO()}, new Locale("es"));
                 logger.info(info);
@@ -164,7 +155,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             if (optionalT.isPresent()) {
                 Serializable entity = (Serializable) optionalT.orElse(null);
                 commandRepo.delete(entity);
-                this.registrarEvento(entity, ArqEvent.EVENT_TYPE_DELETE, id);
                 info = messageSource.getMessage(ArqConstantMessages.DELETED_OK,
                         new Object[]{getClassOfDTO()}, LocaleContextHolder.getLocale());
                 logger.info(messageSource.getMessage(ArqConstantMessages.DELETED_OK,
@@ -232,7 +222,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         } else {
             try {
                 commandRepo.deleteAll();
-                this.registrarEventos(registros, ArqEvent.EVENT_TYPE_DELETE);
                 info = messageSource.getMessage(ArqConstantMessages.DELETED_ALL_OK,
                         new Object[]{getClassOfDTO()}, LocaleContextHolder.getLocale());
                 logger.info(messageSource.getMessage(ArqConstantMessages.DELETED_ALL_OK,

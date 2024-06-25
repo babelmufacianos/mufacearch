@@ -22,12 +22,12 @@ public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<Di
             DiplomaDTO filter = new DiplomaDTO();
             filter.setIdCliente(diplomaDTOFilter.getIdCliente());
             diplomaDTOS.addAll(this.diplomaDTOService.buscarCoincidenciasEstricto(filter));
-        } else if (diplomaDTOFilter.getNombreCompleto() != null) {
+        } else if (diplomaDTOFilter.getNombreCompleto() != null && !diplomaDTOFilter.getNombreCompleto().isEmpty()) {
             DiplomaDTO filter = new DiplomaDTO();
             filter.setNombreCompleto(diplomaDTOFilter.getNombreCompleto());
             diplomaDTOS.addAll(this.diplomaDTOService.buscarCoincidenciasNoEstricto(filter));
-        } else if (diplomaDTOFilter.getTitulacionDeno() != null) {
-            diplomaDTOS.addAll(this.diplomaDTOService.buscarDiplomasPorNombreDeTitulacion(diplomaDTOFilter.getTitulacionDeno()));
+        } else if (diplomaDTOFilter.getTitulacion() != null && !diplomaDTOFilter.getTitulacion().isEmpty()) {
+            diplomaDTOS.addAll(this.diplomaDTOService.buscarDiplomasPorNombreDeTitulacion(diplomaDTOFilter.getTitulacion()));
         } else {
             // si no hay filtro, consultamos todos los registros
             diplomaDTOS.addAll(this.diplomaDTOService.buscarTodos());

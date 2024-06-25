@@ -26,15 +26,11 @@ public class Diploma implements Serializable {
     private String name;
 
     @Column
+    private String titulo;
+
+    @Column
     private String region;
 
-    @OneToOne(mappedBy = "diploma", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Titulacion titulacion;
-
-    @OneToMany(mappedBy = "diploma", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<FirmaOrganismo> firmas;
 
 }
 

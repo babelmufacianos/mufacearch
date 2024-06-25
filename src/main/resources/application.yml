@@ -1,0 +1,104 @@
+server:
+  port: 8080
+
+arch:
+  application-id: sampleDiplomas
+  event-broker-active: false
+  repository-type:
+    active: jpa # mongo o jpa
+  use-cases:
+    diplomas:
+      insercion: "CrearDiplomaUseCase"
+      modificacion: "ActualizarDiplomaUseCase"
+      borrado-general: "BorrarDiplomasUseCase"
+      borrado-por-id: "BorrarDiplomaPorIdUseCase"
+      consulta-por-id: "ConsultaPorIdDiplomasUseCase"
+      consulta-general: "ConsultasDiplomasUseCase"
+      consulta-paginada: "ConsultasPaginadasDiplomasUseCase"
+
+
+spring:
+  mandatory-file-encoding: UTF-8
+
+  # Event bus configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: '*'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    platform: h2
+    initialize: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # query domain
+  data:
+    mongodb:
+      host: 192.168.1.68
+      port: 27017
+      uri: mongodb://test:test@192.168.1.68:27017/bdMongo
+      database: bdMongo
+
+auditoria:
+  data:
+    mongodb:
+      host: 192.168.1.68
+      port: 27017
+      uri: mongodb://test:test@192.168.1.68:27017/auditDB
+      database: auditDB
+
+    sql:
+      init:
+        mode: always
+    jpa:
+      hibernate:
+        ddl-auto: update
+        show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost/realms/diploma-realm
+          jwk-set-uri: http://localhost/realms/diploma-realm/protocol/openid-connect/certs
+
+# escuchando en el puerto 80
+keycloak:
+  realm: diploma-realm
+  auth-server-url: http://localhost/auth
+  resource: spring-boot-client
+  credentials:
+    secret: dgeTtq0crVJsoNWXv0ydcPnepJwzlDZj
+  principal-attribute: usertest
+  use-resource-role-mappings: true

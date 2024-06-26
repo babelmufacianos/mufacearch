@@ -17,12 +17,9 @@ public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<Di
 
     @Override
     public List<DiplomaDTO> execute(DiplomaDTO diplomaDTOFilter) {
-        if (diplomaDTOFilter.getNombreCompleto() != null && !diplomaDTOFilter.getNombreCompleto().isEmpty()) {
-            return this.diplomaDTOService.buscarCoincidenciasNoEstricto(diplomaDTOFilter);
-        } else {
-            // si no hay filtro, consultamos todos los registros
-            return this.diplomaDTOService.buscarTodos();
-        }
+        return (diplomaDTOFilter.getNombreCompleto() != null && !diplomaDTOFilter.getNombreCompleto().isEmpty())
+                ? this.diplomaDTOService.buscarCoincidenciasNoEstricto(diplomaDTOFilter) :
+                  this.diplomaDTOService.buscarTodos();
     }
 
 

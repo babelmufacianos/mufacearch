@@ -17,23 +17,29 @@ import java.util.Map;
 public class ArqRepoConfig {
     @Autowired
     private ApplicationContext applicationContext;
+    @Bean
+    public Map<String, ArqPortRepository<?, String>> mongoDiplomaDTORepository() {
+        Map<String, ArqPortRepository<?, String>> repositoryMap = new HashMap<>();
+        Map<String, MongoRepository> mongoRepositories = applicationContext.getBeansOfType(MongoRepository.class);
+
+        mongoRepositories.keySet().forEach((repositorykey) -> {
+            ArqMongoAdapterRepository<?, String> repository = new ArqMongoAdapterRepository<>();
+            MongoRepository<?, String> mongoRepository = mongoRepositories.get(repositorykey);
+            repository.setMongoRepository(mongoRepository);
+            repositoryMap.put(repositorykey, repository);
+        });
+        return repositoryMap;
+    }
 
     @Bean
-    public Map<String, ArqPortRepository<?, ?>> allRepositories() {
-        Map<String, ArqPortRepository<?, ?>> repositoryMap = new HashMap<>();
+    public Map<String, ArqPortRepository<?, Long>> jpaCommonRepositories() {
+        Map<String, ArqPortRepository<?, Long>> repositoryMap = new HashMap<>();
         Map<String, JpaRepository>  jpaRepositories = applicationContext.getBeansOfType(JpaRepository.class);
 
         jpaRepositories.keySet().forEach((repositorykey) -> {
             ArqRelationalAdapterRepository<?, Long> repository = new ArqRelationalAdapterRepository();
             JpaRepository<?, Long> jpaRepository = jpaRepositories.get(repositorykey);
             repository.setJpaRepository(jpaRepository);
-            repositoryMap.put(repositorykey, repository);
-        });
-        Map<String, MongoRepository> mongoRepositories = applicationContext.getBeansOfType(MongoRepository.class);
-        mongoRepositories.keySet().forEach((repositorykey) -> {
-            ArqMongoAdapterRepository<?, String> repository = new ArqMongoAdapterRepository<>();
-            MongoRepository<?, String> mongoRepository = mongoRepositories.get(repositorykey);
-            repository.setMongoRepository(mongoRepository);
             repositoryMap.put(repositorykey, repository);
         });
         return repositoryMap;

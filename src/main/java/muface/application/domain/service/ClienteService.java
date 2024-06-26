@@ -19,7 +19,7 @@ public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String
 
     /*** métodos personalizados ***/
 
-    public List<ClienteDocumentDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion) {
+    public List<ClienteDocumentDTO> buscarClientesPorTitulacion(String nameOfTitulacion) {
         List<ClienteDocumentDTO> resultado = new ArrayList<>();
         ClienteRepository clienteRepository = (ClienteRepository) getRepositorio();
         List<ClienteDocument> listaEntities = clienteRepository.findClientesByTitulacionName(nameOfTitulacion);
@@ -31,7 +31,7 @@ public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String
         return resultado;
     }
 
-    public Page<ClienteDocumentDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion, Pageable pageable) {
+    public Page<ClienteDocumentDTO> buscarClientesPorTitulacion(String nameOfTitulacion, Pageable pageable) {
         ClienteRepository clienteRepository = (ClienteRepository) getRepositorio();
         Pageable newPageable = mapearCamposOrdenacionDeEntidad(new ClienteDocumentDTO(), pageable);
         Page<ClienteDocument> resultado = clienteRepository.findClientesByTitulacionName(nameOfTitulacion, newPageable);

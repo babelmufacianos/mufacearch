@@ -1,11 +1,13 @@
 package muface.application.domain.valueobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import muface.arch.command.IArqDTO;
 import muface.application.domain.model.ClienteDocument;
 import org.springframework.stereotype.Component;
 
 @Component
+@Data
 public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
 
     private String id;

@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoRepositories(
-        basePackages = "com.mfc.microdiplomas.domain.repository",
+        basePackages = "muface.application.domain.repository",
         mongoTemplateRef = "bdMongoTemplate"
 )
 

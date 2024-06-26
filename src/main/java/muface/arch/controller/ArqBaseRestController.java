@@ -69,15 +69,14 @@ public abstract class ArqBaseRestController {
 
     /**** private methods ****/
 
-
     @Transactional
-    protected final ResponseEntity<Object> executeUseCaseWithInputBody(final String useCase, IArqDTO dtoInBody) {
+    protected final ResponseEntity<Object> executeUseCaseWithRequestBody(final String useCase, IArqDTO dtoInBody) {
         Object result = useCaseExecutor.executeUseCase(useCase, dtoInBody);
         return ResponseEntity.ok(result);
     }
 
     @Transactional
-    protected final ResponseEntity<Object> executeUseCaseById(final String useCase, Object id) {
+    protected final ResponseEntity<Object> executeUseCaseWithRequestId(final String useCase, Object id) {
         Object result = useCaseExecutor.executeUseCase(useCase, id);
         return ResponseEntity.ok(result);
     }
@@ -112,9 +111,9 @@ public abstract class ArqBaseRestController {
 
         switch (useCaseType) {
             case CREATE, UPDATE, DELETE, QUERY_BY_PARAMS:
-                return executeUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
+                return executeUseCaseWithRequestBody(useCaseValue, (IArqDTO) args[0]);
             case DELETE_BY_ID, QUERY_BY_ID:
-                return executeUseCaseById(useCaseValue, args[0]);
+                return executeUseCaseWithRequestId(useCaseValue, args[0]);
             case QUERY_PAGINATED:
                 return executeUseQueryPagination(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
             default:

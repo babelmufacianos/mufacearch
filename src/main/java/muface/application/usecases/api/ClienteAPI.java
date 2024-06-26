@@ -21,37 +21,37 @@ public class ClienteAPI extends ArqBaseRestController {
 
     @PostMapping
     public ResponseEntity<Object> crear(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
+        return this.executeUseCaseWithRequestBody(getCasoUsoInsercion(), dtoInBody);
     }
 
     @PutMapping
     public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
+        return this.executeUseCaseWithRequestBody(getCasoUsoModificacion(), dtoInBody);
     }
 
     @DeleteMapping
     public ResponseEntity<Object> borrarAll() {
-        return this.executeUseCaseWithInputBody(getCasoUsoBorrado(), null);
+        return this.executeUseCaseWithRequestBody(getCasoUsoBorrado(), null);
     }
 
     @PostMapping("borrarSeleccion")
     public ResponseEntity<Object> borrarSeleccion(@RequestBody ClienteDocumentDTO dtoInBody) {
-        return this.executeUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
+        return this.executeUseCaseWithRequestBody(getCasoUsoBorrado(), dtoInBody);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> borrarPorId(@PathVariable ClienteDocumentDTO id) {
-        return this.executeUseCaseById(getCasoUsoBorradoPorId(), id);
+        return this.executeUseCaseWithRequestId(getCasoUsoBorradoPorId(), id);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Object> consultaPorId(@PathVariable String id) {
-        return this.executeUseCaseById(getCasoUsoConsultaPorId(), id);
+        return this.executeUseCaseWithRequestId(getCasoUsoConsultaPorId(), id);
     }
 
     @PostMapping("consulta")
     public ResponseEntity<Object> consulta(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
+        return this.executeUseCaseWithRequestBody(getCasoUsoConsultaGeneral(), dtoInBody);
     }
 
     @PostMapping("consulta-paginada")

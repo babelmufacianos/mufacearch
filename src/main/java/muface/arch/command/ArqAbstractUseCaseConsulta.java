@@ -7,8 +7,6 @@ import java.util.List;
 
 public abstract class ArqAbstractUseCaseConsulta<R extends List, P> implements IArqCommand<R, P> {
 
-    @Autowired
-    protected ArqGenericService commandService;
     public abstract R execute(P params);
 
     @Override

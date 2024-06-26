@@ -15,15 +15,7 @@ public class ConsultasPaginadasDiplomasUseCase extends ArqAbstractUseCasePaginat
     private DiplomaDTOService diplomaDTOService;
 
     public Page<DiplomaDTO> execute(DiplomaDTO diplomaDTO, Pageable pageable) {
-        if (diplomaDTO.getIdCliente() != null) {
-            DiplomaDTO filter = new DiplomaDTO();
-            filter.setIdCliente(diplomaDTO.getIdCliente());
-            return this.diplomaDTOService.buscarCoincidenciasEstrictoPaginados(filter, pageable);
-       } else if (diplomaDTO.getNombreCompleto() != null && !diplomaDTO.getNombreCompleto().isEmpty()) {
-            DiplomaDTO filter = new DiplomaDTO();
-            filter.setNombreCompleto(diplomaDTO.getNombreCompleto());
-            return this.diplomaDTOService.buscarCoincidenciasNoEstrictoPaginados(filter, pageable);
-        } else if (diplomaDTO.getTitulacion() != null && !diplomaDTO.getTitulacion().isEmpty()) {
+        if (diplomaDTO.getTitulacion() != null && !diplomaDTO.getTitulacion().isEmpty()) {
             DiplomaDTO filter = new DiplomaDTO();
             filter.setTitulacion(diplomaDTO.getTitulacion());
             return this.diplomaDTOService.buscarDiplomasPorNombreDeTitulacion(diplomaDTO.getTitulacion(), pageable);

@@ -1,4 +1,4 @@
-package muface.application.usecases.diplomasSQL;
+package muface.application.usecases.diplomas;
 
 import muface.application.domain.service.DiplomaService;
 import muface.arch.command.usecase.ArqAbstractUseCaseConsulta;

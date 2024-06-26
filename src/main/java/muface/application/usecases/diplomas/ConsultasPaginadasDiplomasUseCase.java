@@ -1,4 +1,4 @@
-package muface.application.usecases.diplomasSQL;
+package muface.application.usecases.diplomas;
 
 import muface.arch.command.usecase.ArqAbstractUseCasePagination;
 import muface.application.domain.valueobject.DiplomaDTO;

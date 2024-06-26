@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ClienteRepository {
 
-    List<ClienteDocument> buscarClienteConUnaTitulacion(String titulacionName);
+    List<ClienteDocument> findByOfficial(String titulacionName);
 
-    Page<ClienteDocument> buscarClienteConUnaTitulacion(String titulacionName, Pageable pageable);
+    Page<ClienteDocument> findByOfficial(String titulacionName, Pageable pageable);
 
 }

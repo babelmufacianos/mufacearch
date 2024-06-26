@@ -1,4 +1,4 @@
-package muface.application.usecases.clientesNoSQL;
+package muface.application.usecases.clientes;
 
 import muface.application.domain.service.ClienteService;
 import muface.application.domain.valueobject.ClienteDocumentDTO;

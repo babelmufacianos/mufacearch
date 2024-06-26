@@ -15,7 +15,7 @@ public class DiplomaAPI extends ArqBaseRestController {
     @ArqUseCaseDefinition(value = "CrearDiplomaUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping
     public ResponseEntity<Object> crear(@RequestBody DiplomaDTO dtoInBody) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "ActualizarDiplomaUseCase", type = ArqUseCaseType.UPDATE)

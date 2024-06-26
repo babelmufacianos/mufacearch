@@ -1,7 +1,9 @@
 package muface.application.usecases.api;
 
 import muface.application.domain.valueobject.ClienteDocumentDTO;
+import muface.arch.command.usecase.ArqUseCaseType;
 import muface.arch.controller.ArqBaseRestController;
+import muface.arch.controller.ArqUseCaseDefinition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,55 +12,47 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "clientes")
 public class ClienteAPI extends ArqBaseRestController {
 
-    /**
-     * @return
-     * Devuelve el valor de la propiedad del application.yml, use-cases:  diplomas   para esta API
-     */
-    @Override
-    protected String getPrefix() {
-        return "clientes";
-    }
-
+    @ArqUseCaseDefinition(value = "CrearClienteNoSQLUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping
-    public ResponseEntity<Object> crear(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithRequestBody(getCasoUsoInsercion(), dtoInBody);
+    public ResponseEntity<Object> crear(@RequestBody ClienteDocumentDTO dtoInBody) {
+        return ResponseEntity.ok("");
     }
 
+    @ArqUseCaseDefinition(value = "ActualizarClienteNoSQLUseCase", type = ArqUseCaseType.UPDATE)
     @PutMapping
-    public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithRequestBody(getCasoUsoModificacion(), dtoInBody);
+    public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) {
+        return null;
     }
 
+    @ArqUseCaseDefinition(value = "BorrarClientesNoSQLUseCase", type = ArqUseCaseType.DELETE)
     @DeleteMapping
-    public ResponseEntity<Object> borrarAll() {
-        return this.executeUseCaseWithRequestBody(getCasoUsoBorrado(), null);
+    public ResponseEntity<Object> borrar(@RequestBody ClienteDocumentDTO dtoInBody) {
+        return null;
     }
 
-    @PostMapping("borrarSeleccion")
-    public ResponseEntity<Object> borrarSeleccion(@RequestBody ClienteDocumentDTO dtoInBody) {
-        return this.executeUseCaseWithRequestBody(getCasoUsoBorrado(), dtoInBody);
-    }
-
+    @ArqUseCaseDefinition(value = "BorrarClienteNoSQLPorIdUseCase", type = ArqUseCaseType.DELETE_BY_ID)
     @DeleteMapping("{id}")
     public ResponseEntity<Object> borrarPorId(@PathVariable String id) {
-        return this.executeUseCaseWithRequestId(getCasoUsoBorradoPorId(), id);
+        return null;
     }
 
+    @ArqUseCaseDefinition(value = "ConsultaPorIdClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_BY_ID)
     @GetMapping("{id}")
     public ResponseEntity<Object> consultaPorId(@PathVariable String id) {
-        return this.executeUseCaseWithRequestId(getCasoUsoConsultaPorId(), id);
+        return null;
     }
 
+    @ArqUseCaseDefinition(value = "ConsultasClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_BY_PARAMS)
     @PostMapping("consulta")
-    public ResponseEntity<Object> consulta(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeUseCaseWithRequestBody(getCasoUsoConsultaGeneral(), dtoInBody);
+    public ResponseEntity<Object> consultaPorCampos(@RequestBody ClienteDocumentDTO filter) {
+        return null;
     }
 
+    @ArqUseCaseDefinition(value = "ConsultasPaginadasClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_PAGINATED)
     @PostMapping("consulta-paginada")
-    public ResponseEntity<Object> consultapaginados(@RequestBody ClienteDocumentDTO dtoInBody, Pageable pageable) {
-        return this.executeUseQueryPagination(getCasoUsoConsultaPaginada(), dtoInBody, pageable);
+    public ResponseEntity<Object> consultaPaginadaPorCampos(@RequestBody ClienteDocumentDTO filter, Pageable pageable) {
+        return null;
     }
-
     /** pesonalized endpoints **/
 
     @PostMapping("bienvenido")

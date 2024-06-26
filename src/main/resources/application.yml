@@ -4,15 +4,6 @@ server:
 arch:
   application-id: sampleDiplomas
   event-broker-active: false
-  use-cases:
-    clientes:
-      insercion: "CrearClienteNoSQLUseCase"
-      modificacion: "ActualizarClienteNoSQLUseCase"
-      borrado-general: "BorrarClientesNoSQLUseCase"
-      borrado-por-id: "BorrarClienteNoSQLPorIdUseCase"
-      consulta-por-id: "ConsultaPorIdClientesNoSQLUseCase"
-      consulta-general: "ConsultasClientesNoSQLUseCase"
-      consulta-paginada: "ConsultasPaginadasClientesNoSQLUseCase"
 
 spring:
   mandatory-file-encoding: UTF-8

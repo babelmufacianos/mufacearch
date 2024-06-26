@@ -3,7 +3,6 @@ package muface.arch.controller;
 import muface.arch.command.IArqDTO;
 import muface.arch.command.ArqUseCaseExecutor;
 import jakarta.transaction.Transactional;
-import muface.application.domain.valueobject.DiplomaDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,22 +54,22 @@ public abstract class ArqBaseRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> crear(@RequestBody DiplomaDTO dtoInBody) { // usaríamos la Entidad no el DTO
+    public ResponseEntity<Object> crear(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
         return this.executeCreateUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
     }
 
     @PutMapping
-    public ResponseEntity<Object> actualizar(@RequestBody DiplomaDTO dtoInBody) { // usaríamos la Entidad no el DTO
+    public ResponseEntity<Object> actualizar(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
         return this.executeCreateUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
     }
 
     @DeleteMapping
     public ResponseEntity<Object> borrarAll() {
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), new DiplomaDTO());
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), null);
     }
 
     @PostMapping("borrarSeleccion")
-    public ResponseEntity<Object> borrarSeleccion(@RequestBody DiplomaDTO dtoInBody) {
+    public ResponseEntity<Object> borrarSeleccion(@RequestBody IArqDTO dtoInBody) {
         return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
     }
 
@@ -85,12 +84,12 @@ public abstract class ArqBaseRestController {
     }
 
     @PostMapping("consulta")
-    public ResponseEntity<Object> consulta(@RequestBody DiplomaDTO dtoInBody) { // usaríamos la Entidad no el DTO
+    public ResponseEntity<Object> consulta(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
         return this.executeCreateUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
     }
 
     @PostMapping("consulta-paginada")
-    public ResponseEntity<Object> consultapaginados(@RequestBody DiplomaDTO dtoInBody, Pageable pageable) {
+    public ResponseEntity<Object> consultapaginados(@RequestBody IArqDTO dtoInBody, Pageable pageable) {
         return this.executeUseQueryPagination(getCasoUsoConsultaPaginada(), dtoInBody, pageable);
     }
 

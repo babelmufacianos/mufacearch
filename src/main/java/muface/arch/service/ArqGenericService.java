@@ -153,7 +153,11 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     @Transactional
     public String borrarEntidades(D filter) {
-        return borrarEntidades(this.buscarCoincidenciasEstricto(filter));
+        if (filter == null){
+            return borrarTodos();
+        } else {
+            return borrarEntidades(this.buscarCoincidenciasEstricto(filter));
+        }
     }
 
     @Override

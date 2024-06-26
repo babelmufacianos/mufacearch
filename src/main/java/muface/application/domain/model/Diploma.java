@@ -30,6 +30,5 @@ public class Diploma implements Serializable {
     @Column
     private String region;
 
-
 }
 

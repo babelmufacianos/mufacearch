@@ -34,7 +34,6 @@ public abstract class ArqBaseRestController {
     protected String getPrefix() {
         return "unknown-uri";
     }
-
     protected String getCasoUso(String key) {
         return applicationContext.getEnvironment().getProperty("arch.use-cases." + getPrefix() + "." + key);
     }
@@ -96,7 +95,7 @@ public abstract class ArqBaseRestController {
     /*** comportamiento AOP **/
 
     @Around("@annotation(muface.arch.controller.ArqUseCaseDefinition)")
-    public ResponseEntity handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity<Object> handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         ArqUseCaseDefinition useCaseDefinition = signature.getMethod().getAnnotation(ArqUseCaseDefinition.class);
         String useCaseValue = useCaseDefinition.value();
@@ -105,7 +104,7 @@ public abstract class ArqBaseRestController {
         Object[] args = joinPoint.getArgs();
         validateParameters(useCaseType, args);
 
-        // Aplicar el mapeo HTTP dinÃ¡micamente (Simulado aquÃ­, en realidad no se puede aplicar dinÃ¡micamente)
+        // Aplicar el mapeo HTTP dinÃ¡micamente (Simulado aqui, en realidad no se puede aplicar dinamicamente)
         Method method = signature.getMethod();
         applyHttpMapping(method, useCaseType);
 
@@ -123,17 +122,13 @@ public abstract class ArqBaseRestController {
 
     private void validateParameters(ArqUseCaseType useCaseType, Object[] args) {
         switch (useCaseType) {
-            case CREATE:
-            case UPDATE:
-            case DELETE:
-            case QUERY_BY_PARAMS:
+            case CREATE, UPDATE, DELETE, QUERY_BY_PARAMS:
                 if (args.length != 1 || !(args[0] instanceof IArqDTO)) {
                     throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
                 }
                 break;
-            case DELETE_BY_ID:
-            case QUERY_BY_ID:
-                if (args.length != 1 || !(args[0] instanceof Long)) {
+            case DELETE_BY_ID, QUERY_BY_ID:
+                if (args.length != 1 || !(args[0] instanceof Long || args[0] instanceof String)) {
                     throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
                 }
                 break;
@@ -152,7 +147,7 @@ public abstract class ArqBaseRestController {
             case CREATE:
                 if (!method.isAnnotationPresent(PostMapping.class)) {
                     throw new IllegalArgumentException("Missing @PostMapping() for use case type: " + useCaseType);
-                    // AquÃ­ no se puede realmente aÃ±adir dinÃ¡micamente una anotaciÃ³n a un mÃ©todo en tiempo de ejecuciÃ³n
+                    // aqui no se puede realmente anyadir dinamicamente una anotacion a un metodo en tiempo de ejecucion
                     // Se supone que las anotaciones ya estÃ¡n presentes o se manejan en la definiciÃ³n inicial
                 }
                 break;

@@ -40,7 +40,7 @@ public class ClienteAPI extends ArqBaseRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> borrarPorId(@PathVariable ClienteDocumentDTO id) {
+    public ResponseEntity<Object> borrarPorId(@PathVariable String id) {
         return this.executeUseCaseWithRequestId(getCasoUsoBorradoPorId(), id);
     }
 

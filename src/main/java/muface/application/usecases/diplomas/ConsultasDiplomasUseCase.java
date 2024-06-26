@@ -12,14 +12,11 @@ import java.util.List;
 @Component
 public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<DiplomaDTO>, DiplomaDTO> {
 
-    @Autowired
-    private DiplomaDTOService diplomaDTOService;
-
     @Override
     public List<DiplomaDTO> execute(DiplomaDTO diplomaDTOFilter) {
         return (diplomaDTOFilter.getNombreCompleto() != null && !diplomaDTOFilter.getNombreCompleto().isEmpty())
-                ? this.diplomaDTOService.buscarCoincidenciasNoEstricto(diplomaDTOFilter) :
-                  this.diplomaDTOService.buscarTodos();
+                ? this.commandService.buscarCoincidenciasNoEstricto(diplomaDTOFilter) :
+                  this.commandService.buscarTodos();
     }
 
 

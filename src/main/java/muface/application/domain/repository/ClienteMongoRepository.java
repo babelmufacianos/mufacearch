@@ -13,12 +13,11 @@ import java.util.List;
 @Repository
 public interface ClienteMongoRepository extends MongoRepository<ClienteDocument, String>, ClienteRepository {
 
-    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:titulacionName%")
-    List<ClienteDocument> findClientesByTitulacionName(@Param("titulacionName") String titulacionName);
+    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:official%")
+    List<ClienteDocument> buscarClienteConUnaTitulacion(@Param("official") String official);
 
-    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:titulacionName%")
-    Page<ClienteDocument> findClientesByTitulacionName(@Param("titulacionName") String titulacionName,
-                                                       Pageable pageable);
+    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:official%")
+    Page<ClienteDocument> buscarClienteConUnaTitulacion(@Param("official") String official, Pageable pageable);
 
 }
 

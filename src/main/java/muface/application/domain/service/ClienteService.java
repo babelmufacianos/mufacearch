@@ -19,7 +19,7 @@ public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String
     public List<ClienteDocumentDTO> buscarClientesPorTitulacion(String nameOfTitulacion) {
         List<ClienteDocumentDTO> resultado = new ArrayList<>();
         ClienteRepository clienteRepository = (ClienteRepository) getRepositorio();
-        List<ClienteDocument> listaEntities = clienteRepository.findClientesByTitulacionName(nameOfTitulacion);
+        List<ClienteDocument> listaEntities = clienteRepository.buscarClienteConUnaTitulacion(nameOfTitulacion);
         listaEntities.forEach((cliente) -> {
             ClienteDocumentDTO clienteDTO = new ClienteDocumentDTO();
             clienteDTO.setEntity(cliente);
@@ -31,7 +31,7 @@ public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String
     public Page<ClienteDocumentDTO> buscarClientesPorTitulacion(String nameOfTitulacion, Pageable pageable) {
         ClienteRepository clienteRepository = (ClienteRepository) getRepositorio();
         Pageable newPageable = mapearCamposOrdenacionDeEntidad(new ClienteDocumentDTO(), pageable);
-        Page<ClienteDocument> resultado = clienteRepository.findClientesByTitulacionName(nameOfTitulacion, newPageable);
+        Page<ClienteDocument> resultado = clienteRepository.buscarClienteConUnaTitulacion(nameOfTitulacion, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 

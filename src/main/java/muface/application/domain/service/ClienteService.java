@@ -1,12 +1,9 @@
 package muface.application.domain.service;
 
 import muface.application.domain.model.ClienteDocument;
-import muface.application.domain.model.Diploma;
 import muface.application.domain.repository.ClienteRepository;
-import muface.application.domain.repository.DiplomaRepository;
 import muface.application.domain.valueobject.ClienteDocumentDTO;
-import muface.application.domain.valueobject.DiplomaDTO;
-import muface.arch.service.ArqGenericService;
+import muface.arch.service.ArqNoSQLService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String> {
+public class ClienteService extends ArqNoSQLService<ClienteDocumentDTO, String> {
 
     /*** métodos personalizados ***/
 

@@ -17,16 +17,12 @@ public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<Di
 
     @Override
     public List<DiplomaDTO> execute(DiplomaDTO diplomaDTOFilter) {
-        List<DiplomaDTO> diplomaDTOS = new ArrayList<>();
         if (diplomaDTOFilter.getNombreCompleto() != null && !diplomaDTOFilter.getNombreCompleto().isEmpty()) {
-            DiplomaDTO filter = new DiplomaDTO();
-            filter.setNombreCompleto(diplomaDTOFilter.getNombreCompleto());
-            diplomaDTOS.addAll(this.diplomaDTOService.buscarCoincidenciasNoEstricto(filter));
+            return this.diplomaDTOService.buscarCoincidenciasNoEstricto(diplomaDTOFilter);
         } else {
             // si no hay filtro, consultamos todos los registros
-            diplomaDTOS.addAll(this.diplomaDTOService.buscarTodos());
+            return this.diplomaDTOService.buscarTodos();
         }
-        return diplomaDTOS;
     }
 
 

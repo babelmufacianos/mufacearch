@@ -16,8 +16,6 @@ public class ConsultasPaginadasDiplomasUseCase extends ArqAbstractUseCasePaginat
 
     public Page<DiplomaDTO> execute(DiplomaDTO diplomaDTO, Pageable pageable) {
         if (diplomaDTO.getTitulacion() != null && !diplomaDTO.getTitulacion().isEmpty()) {
-            DiplomaDTO filter = new DiplomaDTO();
-            filter.setTitulacion(diplomaDTO.getTitulacion());
             return this.diplomaDTOService.buscarDiplomasPorNombreDeTitulacion(diplomaDTO.getTitulacion(), pageable);
         } else {
             // si no hay filtro, consultamos todos los registros

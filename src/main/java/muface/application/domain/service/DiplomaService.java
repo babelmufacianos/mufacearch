@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DiplomaDTOService extends ArqGenericService<DiplomaDTO, Long> {
+public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
     /*** métodos personalizados ***/
 

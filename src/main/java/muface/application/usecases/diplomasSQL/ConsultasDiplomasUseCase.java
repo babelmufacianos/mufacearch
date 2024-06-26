@@ -1,6 +1,6 @@
-package muface.application.usecases.diplomas;
+package muface.application.usecases.diplomasSQL;
 
-import muface.application.domain.service.DiplomaDTOService;
+import muface.application.domain.service.DiplomaService;
 import muface.arch.command.ArqAbstractUseCaseConsulta;
 import muface.application.domain.valueobject.DiplomaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import java.util.List;
 public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<DiplomaDTO>, DiplomaDTO> {
 
     @Autowired
-    private DiplomaDTOService diplomaDTOService;
+    private DiplomaService diplomaService;
     @Override
     public List<DiplomaDTO> execute(DiplomaDTO diplomaDTOFilter) {
-        return this.diplomaDTOService.buscarCoincidenciasNoEstricto(diplomaDTOFilter);
+        return this.diplomaService.buscarCoincidenciasNoEstricto(diplomaDTOFilter);
 
     }
 

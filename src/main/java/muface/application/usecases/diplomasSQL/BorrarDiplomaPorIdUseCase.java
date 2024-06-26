@@ -1,8 +1,8 @@
-package muface.application.usecases.diplomas;
+package muface.application.usecases.diplomasSQL;
 
 
 import jakarta.transaction.Transactional;
-import muface.application.domain.service.DiplomaDTOService;
+import muface.application.domain.service.DiplomaService;
 import muface.arch.command.ArqAbstractUseCaseDeleteById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class BorrarDiplomaPorIdUseCase extends ArqAbstractUseCaseDeleteById<String, Long> {
 
     @Autowired
-    private DiplomaDTOService diplomaDTOService;
+    private DiplomaService diplomaService;
     @Override
     @Transactional
     public String execute(Long id) {
-        return this.diplomaDTOService.borrarEntidad(id);
+        return this.diplomaService.borrarEntidad(id);
     }
 
 

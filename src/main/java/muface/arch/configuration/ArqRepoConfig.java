@@ -21,7 +21,7 @@ public class ArqRepoConfig {
     @Autowired
     private ApplicationContext applicationContext;
     @Bean
-    @ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "mongo", matchIfMissing = false)
+    //@ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "mongo", matchIfMissing = false)
     public Map<String, ArqPortRepository<?, String>> mongoDiplomaDTORepository(MongoOperations mongoOperations) {
         Map<String, ArqPortRepository<?, String>> repositoryMap = new HashMap<>();
         Map<String, MongoRepository> mongoRepositories = applicationContext.getBeansOfType(MongoRepository.class);
@@ -37,7 +37,7 @@ public class ArqRepoConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "jpa", matchIfMissing = false)
+    //@ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "jpa", matchIfMissing = false)
     public Map<String, ArqPortRepository<?, Long>> jpaCommonRepositories() {
         Map<String, ArqPortRepository<?, Long>> repositoryMap = new HashMap<>();
         Map<String, JpaRepository>  jpaRepositories = applicationContext.getBeansOfType(JpaRepository.class);

@@ -16,14 +16,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 @Aspect
+@Component
 @Order(1)
-public abstract class ArqBaseRestController {
+public class ArqBaseRestController {
     Logger logger = LoggerFactory.getLogger(ArqBaseRestController.class);
     @Autowired
     protected ApplicationContext applicationContext;

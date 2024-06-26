@@ -1,16 +1,13 @@
 package muface.arch.repository;
 
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ArqMongoAdapterRepository<T, ID> implements ArqPortRepository<T, ID> {
-
     private MongoRepository<T, ID> mongoRepository;
-    private MongoOperations mongoOperations;
 
     private String classOfEntity;
 
@@ -30,9 +27,6 @@ public class ArqMongoAdapterRepository<T, ID> implements ArqPortRepository<T, ID
 
     public void setMongoRepository(MongoRepository<?, ID> mongoRepository) {
         this.mongoRepository = (MongoRepository<T, ID>) mongoRepository;
-    }
-    public void setMongoOperations(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
     }
 
     @Override

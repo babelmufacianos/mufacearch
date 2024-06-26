@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ClienteService extends ArqGenericService<ClienteDocumentDTO, Long> {
+public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String> {
 
     /*** métodos personalizados ***/
 

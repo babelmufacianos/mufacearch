@@ -1,4 +1,4 @@
-package muface.arch.command;
+package muface.arch.command.usecase;
 public enum ArqUseCaseType {
     CREATE,
     UPDATE,

@@ -1,7 +1,7 @@
 package muface.arch.controller;
 
-import muface.arch.command.ArqUseCaseDefinition;
-import muface.arch.command.ArqUseCaseType;
+import muface.arch.command.usecase.ArqUseCaseDefinition;
+import muface.arch.command.usecase.ArqUseCaseType;
 import muface.arch.command.IArqDTO;
 import muface.arch.command.usecase.ArqUseCaseExecutor;
 import jakarta.transaction.Transactional;
@@ -94,7 +94,7 @@ public abstract class ArqBaseRestController {
 
     /*** comportamiento AOP **/
 
-    @Around("@annotation(muface.arch.controller.ArqUseCaseDefinition)")
+    @Around("@annotation(muface.arch.command.usecase.ArqUseCaseDefinition)")
     public ResponseEntity<Object> handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         ArqUseCaseDefinition useCaseDefinition = signature.getMethod().getAnnotation(ArqUseCaseDefinition.class);

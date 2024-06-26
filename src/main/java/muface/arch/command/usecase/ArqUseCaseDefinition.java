@@ -1,4 +1,6 @@
-package muface.arch.command;
+package muface.arch.command.usecase;
+
+import muface.arch.command.usecase.ArqUseCaseType;
 
 import java.lang.annotation.*;
 

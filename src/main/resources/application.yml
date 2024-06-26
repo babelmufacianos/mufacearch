@@ -14,13 +14,13 @@ arch:
       consulta-general: "ConsultasDiplomasUseCase"
       consulta-paginada: "ConsultasPaginadasDiplomasUseCase"
     clientes:
-      insercion: "CrearClienteNOSQLUseCase"
-      modificacion: "ActualizarClienteNOSQLUseCase"
-      borrado-general: "BorrarClientesNOSQLUseCase"
-      borrado-por-id: "BorrarClienteNOSQLPorIdUseCase"
-      consulta-por-id: "ConsultaPorIdClientesNOSQLUseCase"
-      consulta-general: "ConsultasClientesNOSQLUseCase"
-      consulta-paginada: "ConsultasPaginadasClientesNOSQLUseCase"
+      insercion: "CrearClienteNoSQLUseCase"
+      modificacion: "ActualizarClienteNoSQLUseCase"
+      borrado-general: "BorrarClientesNoSQLUseCase"
+      borrado-por-id: "BorrarClienteNoSQLPorIdUseCase"
+      consulta-por-id: "ConsultaPorIdClientesNoSQLUseCase"
+      consulta-general: "ConsultasClientesNoSQLUseCase"
+      consulta-paginada: "ConsultasPaginadasClientesNoSQLUseCase"
 
 spring:
   mandatory-file-encoding: UTF-8

@@ -16,7 +16,7 @@ public class ActualizarClienteNoSQLUseCase extends ArqAbstractUseCase<ClienteDoc
     @Override
     @Transactional
     public ClienteDocumentDTO execute(ClienteDocumentDTO clienteDocumentDTO) {
-        return (ClienteDocumentDTO) this.clienteService.actualizar(clienteDocumentDTO);
+        return this.clienteService.actualizar(clienteDocumentDTO);
     }
 
 }

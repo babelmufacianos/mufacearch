@@ -15,7 +15,7 @@ public class CrearClienteNoSQLUseCase extends ArqAbstractUseCase<ClienteDocument
     @Override
     @Transactional
     public ClienteDocumentDTO execute(ClienteDocumentDTO clienteDocumentDTO) {
-        return (ClienteDocumentDTO) this.clienteService.insertar(clienteDocumentDTO);
+        return this.clienteService.insertar(clienteDocumentDTO);
     }
 
 }

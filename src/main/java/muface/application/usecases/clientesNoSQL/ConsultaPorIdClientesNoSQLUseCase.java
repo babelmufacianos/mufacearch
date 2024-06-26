@@ -14,7 +14,7 @@ public class ConsultaPorIdClientesNoSQLUseCase extends ArqAbstractUseCaseById<Cl
 
     @Override
     public ClienteDocumentDTO execute(String id) {
-        return (ClienteDocumentDTO) this.clienteService.buscarPorId(id);
+        return this.clienteService.buscarPorId(id);
     }
 
 }

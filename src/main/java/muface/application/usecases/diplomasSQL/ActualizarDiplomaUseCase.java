@@ -15,7 +15,7 @@ public class ActualizarDiplomaUseCase extends ArqAbstractUseCase<DiplomaDTO, Dip
     @Override
     @Transactional
     public DiplomaDTO execute(DiplomaDTO diplomaDTO) {
-        return (DiplomaDTO) this.diplomaService.actualizar(diplomaDTO);
+        return this.diplomaService.actualizar(diplomaDTO);
     }
 
 }

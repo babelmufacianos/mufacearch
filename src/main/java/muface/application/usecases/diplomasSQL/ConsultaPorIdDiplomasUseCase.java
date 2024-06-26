@@ -13,7 +13,7 @@ public class ConsultaPorIdDiplomasUseCase extends ArqAbstractUseCaseById<Diploma
     private DiplomaService diplomaService;
     @Override
     public DiplomaDTO execute(Long id) {
-        return (DiplomaDTO) this.diplomaService.buscarPorId(id);
+        return this.diplomaService.buscarPorId(id);
     }
 
 }

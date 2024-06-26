@@ -15,7 +15,7 @@ public class CrearDiplomaUseCase extends ArqAbstractUseCase<DiplomaDTO, DiplomaD
     @Override
     @Transactional
     public DiplomaDTO execute(DiplomaDTO diplomaDTO) {
-        return (DiplomaDTO) this.diplomaService.insertar(diplomaDTO);
+        return this.diplomaService.insertar(diplomaDTO);
     }
 
 }

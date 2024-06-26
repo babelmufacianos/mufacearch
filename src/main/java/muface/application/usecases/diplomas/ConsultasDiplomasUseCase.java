@@ -16,7 +16,6 @@ public class ConsultasDiplomasUseCase extends ArqAbstractUseCaseConsulta<List<Di
     @Override
     public List<DiplomaDTO> execute(DiplomaDTO diplomaDTOFilter) {
         return this.diplomaService.buscarCoincidenciasNoEstricto(diplomaDTOFilter);
-
     }
 
 

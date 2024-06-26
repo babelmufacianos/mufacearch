@@ -21,37 +21,37 @@ public class ClienteAPI extends ArqBaseRestController {
     @ArqUseCaseDefinition(value = "ActualizarClienteNoSQLUseCase", type = ArqUseCaseType.UPDATE)
     @PutMapping
     public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "BorrarClientesNoSQLUseCase", type = ArqUseCaseType.DELETE)
     @DeleteMapping
     public ResponseEntity<Object> borrar(@RequestBody ClienteDocumentDTO dtoInBody) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "BorrarClienteNoSQLPorIdUseCase", type = ArqUseCaseType.DELETE_BY_ID)
     @DeleteMapping("{id}")
     public ResponseEntity<Object> borrarPorId(@PathVariable String id) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "ConsultaPorIdClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_BY_ID)
     @GetMapping("{id}")
     public ResponseEntity<Object> consultaPorId(@PathVariable String id) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "ConsultasClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_BY_PARAMS)
     @PostMapping("consulta")
     public ResponseEntity<Object> consultaPorCampos(@RequestBody ClienteDocumentDTO filter) {
-        return null;
+        return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "ConsultasPaginadasClientesNoSQLUseCase", type = ArqUseCaseType.QUERY_PAGINATED)
     @PostMapping("consulta-paginada")
     public ResponseEntity<Object> consultaPaginadaPorCampos(@RequestBody ClienteDocumentDTO filter, Pageable pageable) {
-        return null;
+        return ResponseEntity.ok("");
     }
     /** pesonalized endpoints **/
 

@@ -14,7 +14,7 @@ public class ConsultasPaginadasClientesNoSQLUseCase extends ArqAbstractUseCasePa
     private ClienteService clienteService;
 
     public Page<ClienteDocumentDTO> execute(ClienteDocumentDTO clienteDocumentDTO, Pageable pageable) {
-        return this.clienteService.buscarClientesPorTitulacion(clienteDocumentDTO.getTitulacionOficial(), pageable);
+        return this.clienteService.buscarClientesPorTitulacion(clienteDocumentDTO.getTitulacionOficial() == null ? "" : clienteDocumentDTO.getTitulacionOficial(), pageable);
     }
 
 

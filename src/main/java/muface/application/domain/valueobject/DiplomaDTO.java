@@ -17,6 +17,9 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
     /** campo calculado transient que no está en el modelo (entidad-relacional o document-non-relational) **/
     private String continente;
 
+    public DiplomaDTO() {
+    }
+
     @Override
     public Long getId() {
         return this.id;

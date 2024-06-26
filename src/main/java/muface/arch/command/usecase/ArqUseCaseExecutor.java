@@ -2,6 +2,7 @@ package muface.arch.command.usecase;
 
 import muface.arch.command.IArqCommand;
 import muface.arch.command.IArqCommandPagination;
+import muface.arch.command.IArqDTO;
 import muface.arch.exceptions.ArqBussinessRuleException;
 import muface.arch.exceptions.NotExistException;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +19,27 @@ public class ArqUseCaseExecutor {
 
     @Autowired
     ApplicationContext applicationContext;
+
+    public final ResponseEntity<Object> executeUseCaseWithRequestBody(final String useCase, IArqDTO dtoInBody) {
+        Object result = executeUseCase(useCase, dtoInBody);
+        return ResponseEntity.ok(result);
+    }
+
+    public final ResponseEntity<Object> executeUseCaseWithRequestId(final String useCase, Object id) {
+        Object result = executeUseCase(useCase, id);
+        return ResponseEntity.ok(result);
+    }
+
+    public final ResponseEntity<Object> executeUseQueryPagination(final String useCase, IArqDTO paramsObject,
+                                                                     Pageable pageable) {
+        Object result = executePaginationUseCase(useCase, paramsObject, pageable);
+        return ResponseEntity.ok(result);
+    }
+
+    public final ResponseEntity<Object> executeUseCaseWithReqParams(final String useCase, Object[] paramsObject) {
+        Object result = executeUseCase(useCase, paramsObject);
+        return ResponseEntity.ok(result);
+    }
 
     @Transactional
     public <R, P> R executeUseCase(String useCaseName, P paramObj) {

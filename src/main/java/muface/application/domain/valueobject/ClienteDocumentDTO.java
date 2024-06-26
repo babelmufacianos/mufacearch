@@ -15,6 +15,9 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
     private String titulacionOficial;
     private String pais;
 
+    public ClienteDocumentDTO() {
+    }
+
     public void setId(String id) {
         this.id = id;
     }

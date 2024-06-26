@@ -18,7 +18,7 @@ public class ArqRepoConfig {
     @Autowired
     private ApplicationContext applicationContext;
     @Bean
-    public Map<String, ArqPortRepository<?, String>> mongoDiplomaDTORepository() {
+    public Map<String, ArqPortRepository<?, String>> mongoCommonRepositories() {
         Map<String, ArqPortRepository<?, String>> repositoryMap = new HashMap<>();
         Map<String, MongoRepository> mongoRepositories = applicationContext.getBeansOfType(MongoRepository.class);
 

@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.annotation.Annotation;
@@ -32,7 +31,9 @@ public abstract class ArqBaseRestController {
     @Autowired
     protected ArqUseCaseExecutor useCaseExecutor;
 
-    protected abstract String getPrefix();
+    protected String getPrefix() {
+        return "unknown-uri";
+    }
 
     protected String getCasoUso(String key) {
         return applicationContext.getEnvironment().getProperty("arch.use-cases." + getPrefix() + "." + key);
@@ -70,24 +71,24 @@ public abstract class ArqBaseRestController {
 
 
     @Transactional
-    protected final ResponseEntity executeCreateUseCaseWithInputBody(final String useCase, IArqDTO dtoInBody) {
+    protected final ResponseEntity<Object> executeUseCaseWithInputBody(final String useCase, IArqDTO dtoInBody) {
         Object result = useCaseExecutor.executeUseCase(useCase, dtoInBody);
         return ResponseEntity.ok(result);
     }
 
     @Transactional
-    protected final ResponseEntity executeUseCaseById(final String useCase, Object id) {
+    protected final ResponseEntity<Object> executeUseCaseById(final String useCase, Object id) {
         Object result = useCaseExecutor.executeUseCase(useCase, id);
         return ResponseEntity.ok(result);
     }
 
-    protected final ResponseEntity executeUseQueryPagination(final String useCase, Object paramsObject,
+    protected final ResponseEntity<Object> executeUseQueryPagination(final String useCase, IArqDTO paramsObject,
                                                              Pageable pageable) {
         Object result = useCaseExecutor.executePaginationUseCase(useCase, paramsObject, pageable);
         return ResponseEntity.ok(result);
     }
 
-    protected final ResponseEntity executeUseCaseWithReqParams(final String useCase, Object[] paramsObject) {
+    protected final ResponseEntity<Object> executeUseCaseWithReqParams(final String useCase, Object[] paramsObject) {
         Object result = useCaseExecutor.executeUseCase(useCase, paramsObject);
         return ResponseEntity.ok(result);
     }
@@ -96,7 +97,7 @@ public abstract class ArqBaseRestController {
     /*** comportamiento AOP **/
 
     @Around("@annotation(muface.arch.controller.ArqUseCaseDefinition)")
-    public ResponseEntity<Object> handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         ArqUseCaseDefinition useCaseDefinition = signature.getMethod().getAnnotation(ArqUseCaseDefinition.class);
         String useCaseValue = useCaseDefinition.value();
@@ -109,25 +110,16 @@ public abstract class ArqBaseRestController {
         Method method = signature.getMethod();
         applyHttpMapping(method, useCaseType);
 
-       /* switch (useCaseType) {
-            case CREATE:
-                return arqBaseRestController.executeCreateUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
-            case UPDATE:
-                return arqBaseRestController.executeUpdateUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
-            case DELETE:
-                return arqBaseRestController.executeDeleteUseCase(useCaseValue, (IArqDTO) args[0]);
-            case DELETE_BY_ID:
-                return arqBaseRestController.executeDeleteUseCase(useCaseValue, (Long) args[0]);
-            case QUERY_BY_ID:
-                return arqBaseRestController.executeUseQueryCaseWithReqParams(useCaseValue, (Long) args[0]);
-            case QUERY_BY_PARAMS:
-                return arqBaseRestController.executeUseQueryCaseWithReqParams(useCaseValue, (IArqDTO) args[0]);
+        switch (useCaseType) {
+            case CREATE, UPDATE, DELETE, QUERY_BY_PARAMS:
+                return executeUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
+            case DELETE_BY_ID, QUERY_BY_ID:
+                return executeUseCaseById(useCaseValue, args[0]);
             case QUERY_PAGINATED:
-                return arqBaseRestController.executeUseQuerypagCaseWithReqParams(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
+                return executeUseQueryPagination(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
             default:
                 return (ResponseEntity<Object>) joinPoint.proceed();
-        }*/
-        return null;
+        }
     }
 
     private void validateParameters(ArqUseCaseType useCaseType, Object[] args) {

@@ -21,22 +21,22 @@ public class ClienteAPI extends ArqBaseRestController {
 
     @PostMapping
     public ResponseEntity<Object> crear(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
+        return this.executeUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
     }
 
     @PutMapping
     public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
+        return this.executeUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
     }
 
     @DeleteMapping
     public ResponseEntity<Object> borrarAll() {
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), null);
+        return this.executeUseCaseWithInputBody(getCasoUsoBorrado(), null);
     }
 
     @PostMapping("borrarSeleccion")
     public ResponseEntity<Object> borrarSeleccion(@RequestBody ClienteDocumentDTO dtoInBody) {
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
+        return this.executeUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
     }
 
     @DeleteMapping("{id}")
@@ -51,7 +51,7 @@ public class ClienteAPI extends ArqBaseRestController {
 
     @PostMapping("consulta")
     public ResponseEntity<Object> consulta(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
+        return this.executeUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
     }
 
     @PostMapping("consulta-paginada")

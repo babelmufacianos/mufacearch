@@ -5,14 +5,6 @@ arch:
   application-id: sampleDiplomas
   event-broker-active: false
   use-cases:
-    diplomas:
-      insercion: "CrearDiplomaUseCase"
-      modificacion: "ActualizarDiplomaUseCase"
-      borrado-general: "BorrarDiplomasUseCase"
-      borrado-por-id: "BorrarDiplomaPorIdUseCase"
-      consulta-por-id: "ConsultaPorIdDiplomasUseCase"
-      consulta-general: "ConsultasDiplomasUseCase"
-      consulta-paginada: "ConsultasPaginadasDiplomasUseCase"
     clientes:
       insercion: "CrearClienteNoSQLUseCase"
       modificacion: "ActualizarClienteNoSQLUseCase"

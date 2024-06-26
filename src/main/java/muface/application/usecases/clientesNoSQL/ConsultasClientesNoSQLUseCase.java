@@ -2,7 +2,7 @@ package muface.application.usecases.clientesNoSQL;
 
 import muface.application.domain.service.ClienteService;
 import muface.application.domain.valueobject.ClienteDocumentDTO;
-import muface.arch.command.ArqAbstractUseCaseConsulta;
+import muface.arch.command.usecase.ArqAbstractUseCaseConsulta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

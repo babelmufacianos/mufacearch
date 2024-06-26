@@ -1,4 +1,7 @@
-package muface.arch.command;
+package muface.arch.command.usecase;
+
+import muface.arch.command.IArqCommand;
+import muface.arch.command.IArqDTO;
 
 public abstract class ArqAbstractUseCase<R extends IArqDTO, P extends IArqDTO> implements IArqCommand {
 

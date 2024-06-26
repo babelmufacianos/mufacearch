@@ -1,5 +1,7 @@
-package muface.arch.command;
+package muface.arch.command.usecase;
 
+import muface.arch.command.IArqCommand;
+import muface.arch.command.IArqCommandPagination;
 import muface.arch.exceptions.ArqBussinessRuleException;
 import muface.arch.exceptions.NotExistException;
 import jakarta.transaction.Transactional;

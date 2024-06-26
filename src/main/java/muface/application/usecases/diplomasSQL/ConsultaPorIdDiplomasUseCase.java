@@ -1,7 +1,7 @@
 package muface.application.usecases.diplomasSQL;
 
 import muface.application.domain.service.DiplomaService;
-import muface.arch.command.ArqAbstractUseCaseById;
+import muface.arch.command.usecase.ArqAbstractUseCaseById;
 import muface.application.domain.valueobject.DiplomaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

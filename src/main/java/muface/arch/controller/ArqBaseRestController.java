@@ -1,16 +1,29 @@
 package muface.arch.controller;
 
+import muface.arch.command.ArqUseCaseDefinition;
+import muface.arch.command.ArqUseCaseType;
 import muface.arch.command.IArqDTO;
-import muface.arch.command.ArqUseCaseExecutor;
+import muface.arch.command.usecase.ArqUseCaseExecutor;
 import jakarta.transaction.Transactional;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+@Aspect
+@Order(1)
 public abstract class ArqBaseRestController {
     Logger logger = LoggerFactory.getLogger(ArqBaseRestController.class);
     @Autowired
@@ -53,46 +66,6 @@ public abstract class ArqBaseRestController {
         return getCasoUso("consulta-paginada");
     }
 
-    @PostMapping
-    public ResponseEntity<Object> crear(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
-    }
-
-    @PutMapping
-    public ResponseEntity<Object> actualizar(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Object> borrarAll() {
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), null);
-    }
-
-    @PostMapping("borrarSeleccion")
-    public ResponseEntity<Object> borrarSeleccion(@RequestBody IArqDTO dtoInBody) {
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity<Object> borrarPorId(@PathVariable Long id) {
-        return this.executeUseCaseById(getCasoUsoBorradoPorId(), id);
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<Object> consultaPorId(@PathVariable Long id) {
-        return this.executeUseCaseById(getCasoUsoConsultaPorId(), id);
-    }
-
-    @PostMapping("consulta")
-    public ResponseEntity<Object> consulta(@RequestBody IArqDTO dtoInBody) { // usaríamos la Entidad no el DTO
-        return this.executeCreateUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
-    }
-
-    @PostMapping("consulta-paginada")
-    public ResponseEntity<Object> consultapaginados(@RequestBody IArqDTO dtoInBody, Pageable pageable) {
-        return this.executeUseQueryPagination(getCasoUsoConsultaPaginada(), dtoInBody, pageable);
-    }
-
     /**** private methods ****/
 
 
@@ -117,6 +90,146 @@ public abstract class ArqBaseRestController {
     protected final ResponseEntity executeUseCaseWithReqParams(final String useCase, Object[] paramsObject) {
         Object result = useCaseExecutor.executeUseCase(useCase, paramsObject);
         return ResponseEntity.ok(result);
+    }
+
+
+    /*** comportamiento AOP **/
+
+    @Around("@annotation(muface.arch.controller.ArqUseCaseDefinition)")
+    public ResponseEntity<Object> handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        ArqUseCaseDefinition useCaseDefinition = signature.getMethod().getAnnotation(ArqUseCaseDefinition.class);
+        String useCaseValue = useCaseDefinition.value();
+        ArqUseCaseType useCaseType = useCaseDefinition.type();
+
+        Object[] args = joinPoint.getArgs();
+        validateParameters(useCaseType, args);
+
+        // Aplicar el mapeo HTTP dinÃ¡micamente (Simulado aquÃ­, en realidad no se puede aplicar dinÃ¡micamente)
+        Method method = signature.getMethod();
+        applyHttpMapping(method, useCaseType);
+
+       /* switch (useCaseType) {
+            case CREATE:
+                return arqBaseRestController.executeCreateUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
+            case UPDATE:
+                return arqBaseRestController.executeUpdateUseCaseWithInputBody(useCaseValue, (IArqDTO) args[0]);
+            case DELETE:
+                return arqBaseRestController.executeDeleteUseCase(useCaseValue, (IArqDTO) args[0]);
+            case DELETE_BY_ID:
+                return arqBaseRestController.executeDeleteUseCase(useCaseValue, (Long) args[0]);
+            case QUERY_BY_ID:
+                return arqBaseRestController.executeUseQueryCaseWithReqParams(useCaseValue, (Long) args[0]);
+            case QUERY_BY_PARAMS:
+                return arqBaseRestController.executeUseQueryCaseWithReqParams(useCaseValue, (IArqDTO) args[0]);
+            case QUERY_PAGINATED:
+                return arqBaseRestController.executeUseQuerypagCaseWithReqParams(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
+            default:
+                return (ResponseEntity<Object>) joinPoint.proceed();
+        }*/
+        return null;
+    }
+
+    private void validateParameters(ArqUseCaseType useCaseType, Object[] args) {
+        switch (useCaseType) {
+            case CREATE:
+            case UPDATE:
+            case DELETE:
+            case QUERY_BY_PARAMS:
+                if (args.length != 1 || !(args[0] instanceof IArqDTO)) {
+                    throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
+                }
+                break;
+            case DELETE_BY_ID:
+            case QUERY_BY_ID:
+                if (args.length != 1 || !(args[0] instanceof Long)) {
+                    throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
+                }
+                break;
+            case QUERY_PAGINATED:
+                if (args.length != 2 || !(args[0] instanceof IArqDTO) || !(args[1] instanceof Pageable)) {
+                    throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown use case type: " + useCaseType);
+        }
+    }
+
+    private void applyHttpMapping(Method method, ArqUseCaseType useCaseType) {
+        switch (useCaseType) {
+            case CREATE:
+                if (!method.isAnnotationPresent(PostMapping.class)) {
+                    throw new IllegalArgumentException("Missing @PostMapping() for use case type: " + useCaseType);
+                    // AquÃ­ no se puede realmente aÃ±adir dinÃ¡micamente una anotaciÃ³n a un mÃ©todo en tiempo de ejecuciÃ³n
+                    // Se supone que las anotaciones ya estÃ¡n presentes o se manejan en la definiciÃ³n inicial
+                }
+                break;
+            case UPDATE:
+                if (!method.isAnnotationPresent(PutMapping.class)) {
+                    throw new IllegalArgumentException("Missing @PutMapping() for use case type: " + useCaseType);
+                }
+                break;
+            case DELETE:
+                if (!method.isAnnotationPresent(DeleteMapping.class)) {
+                    throw new IllegalArgumentException("Missing @DeleteMapping() for use case type: " + useCaseType);
+                }
+                break;
+            case DELETE_BY_ID:
+                if (!method.isAnnotationPresent(DeleteMapping.class)) {
+                    throw new IllegalArgumentException("Missing @DeleteMapping(\"{id}\") for use case type: " + useCaseType);
+
+                }
+                if (!isAnnotationPresentWithValue(method, DeleteMapping.class, "{id}")) {
+                    throw new IllegalArgumentException("Missing @DeleteMapping(\"{id}\") for use case type: " + useCaseType);
+                }
+                break;
+            case QUERY_BY_ID:
+                if (!method.isAnnotationPresent(GetMapping.class)) {
+                    throw new IllegalArgumentException("Missing @GetMapping(\"{id}\") for use case type: " + useCaseType);
+                }
+                if (!isAnnotationPresentWithValue(method, GetMapping.class, "{id}")) {
+                    throw new IllegalArgumentException("Missing @GetMapping(\"{id}\") for use case type: " + useCaseType);
+                }
+                break;
+            case QUERY_BY_PARAMS:
+                if (!method.isAnnotationPresent(PostMapping.class)) {
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta\") for use case type: " + useCaseType);
+                }
+                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consulta")) {
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta\") for use case type: " + useCaseType);
+                }
+                break;
+            case QUERY_PAGINATED:
+                if (!method.isAnnotationPresent(PostMapping.class)) {
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consultapaginados\") for use case type: " + useCaseType);
+                }
+                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consultapaginados")) {
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consultapaginados\") for use case type: " + useCaseType);
+                }
+                break;
+        }
+    }
+
+    private boolean isAnnotationPresentWithValue(Method method, Class<? extends Annotation> annotationClass, String value) {
+        Annotation annotation = method.getAnnotation(annotationClass);
+        if (annotation == null) {
+            return false;
+        }
+
+        try {
+            Method valueMethod = annotation.getClass().getMethod("value");
+            String[] values = (String[]) valueMethod.invoke(annotation);
+            for (String v : values) {
+                if (value.equals(v)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
     }
 
 

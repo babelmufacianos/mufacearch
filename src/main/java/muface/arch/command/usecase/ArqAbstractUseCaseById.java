@@ -1,5 +1,7 @@
-package muface.arch.command;
+package muface.arch.command.usecase;
 
+import muface.arch.command.IArqCommand;
+import muface.arch.command.IArqDTO;
 import muface.arch.service.ArqGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 

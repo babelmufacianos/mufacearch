@@ -1,11 +1,10 @@
 package muface.application.usecases.api;
 
+import muface.application.domain.valueobject.ClienteDocumentDTO;
 import muface.arch.controller.ArqBaseRestController;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "clientes")
@@ -18,6 +17,46 @@ public class ClienteAPI extends ArqBaseRestController {
     @Override
     protected String getPrefix() {
         return "clientes";
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> crear(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoInsercion(), dtoInBody);
+    }
+
+    @PutMapping
+    public ResponseEntity<Object> actualizar(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoModificacion(), dtoInBody);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> borrarAll() {
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), null);
+    }
+
+    @PostMapping("borrarSeleccion")
+    public ResponseEntity<Object> borrarSeleccion(@RequestBody ClienteDocumentDTO dtoInBody) {
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoBorrado(), dtoInBody);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> borrarPorId(@PathVariable ClienteDocumentDTO id) {
+        return this.executeUseCaseById(getCasoUsoBorradoPorId(), id);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Object> consultaPorId(@PathVariable String id) {
+        return this.executeUseCaseById(getCasoUsoConsultaPorId(), id);
+    }
+
+    @PostMapping("consulta")
+    public ResponseEntity<Object> consulta(@RequestBody ClienteDocumentDTO dtoInBody) { // usaríamos la Entidad no el DTO
+        return this.executeCreateUseCaseWithInputBody(getCasoUsoConsultaGeneral(), dtoInBody);
+    }
+
+    @PostMapping("consulta-paginada")
+    public ResponseEntity<Object> consultapaginados(@RequestBody ClienteDocumentDTO dtoInBody, Pageable pageable) {
+        return this.executeUseQueryPagination(getCasoUsoConsultaPaginada(), dtoInBody, pageable);
     }
 
     /** pesonalized endpoints **/

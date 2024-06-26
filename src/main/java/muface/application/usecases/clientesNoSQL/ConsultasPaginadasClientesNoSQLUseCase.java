@@ -2,7 +2,7 @@ package muface.application.usecases.clientesNoSQL;
 
 import muface.application.domain.service.ClienteService;
 import muface.application.domain.valueobject.ClienteDocumentDTO;
-import muface.arch.command.ArqAbstractUseCasePagination;
+import muface.arch.command.usecase.ArqAbstractUseCasePagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

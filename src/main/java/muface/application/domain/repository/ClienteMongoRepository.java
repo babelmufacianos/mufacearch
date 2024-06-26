@@ -1,6 +1,5 @@
 package muface.application.domain.repository;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import muface.application.domain.model.ClienteDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +12,11 @@ import java.util.List;
 @Repository
 public interface ClienteMongoRepository extends MongoRepository<ClienteDocument, String>, ClienteRepository {
 
-    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:official%")
-    List<ClienteDocument> buscarClienteConUnaTitulacion(@Param("official") String official);
+    @Query("{ 'official' : { $regex: ?0, $options: 'i' } }")
+    List<ClienteDocument> buscarClienteConUnaTitulacion(String titulo);
 
-    @Query("SELECT d FROM ClienteDocument d WHERE d.official LIKE %:official%")
-    Page<ClienteDocument> buscarClienteConUnaTitulacion(@Param("official") String official, Pageable pageable);
+    @Query("{ 'official' : { $regex: ?0, $options: 'i' } }")
+    Page<ClienteDocument> buscarClienteConUnaTitulacion(String titulo, Pageable pageable);
 
 }
 

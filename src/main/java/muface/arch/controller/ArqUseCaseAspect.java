@@ -125,10 +125,10 @@ public class ArqUseCaseAspect {
                 break;
             case QUERY_PAGINATED:
                 if (!method.isAnnotationPresent(PostMapping.class)) {
-                    throw new IllegalArgumentException("Missing @PostMapping(\"consultapaginados\") for use case type: " + useCaseType);
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta-paginada\") for use case type: " + useCaseType);
                 }
-                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consultapaginados")) {
-                    throw new IllegalArgumentException("Missing @PostMapping(\"consultapaginados\") for use case type: " + useCaseType);
+                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consulta-paginada")) {
+                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta-paginada\") for use case type: " + useCaseType);
                 }
                 break;
         }

@@ -22,9 +22,9 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class ArqUseCaseAspect {
-
     @Autowired
     protected ArqUseCaseExecutor useCaseExecutor;
+
     public void arqUseCaseDefinitionPointcut() {
         // Pointcut para métodos anotados con @ArqUseCaseDefinition
         int a = 0;
@@ -51,6 +51,9 @@ public class ArqUseCaseAspect {
                 return useCaseExecutor.executeUseCaseWithRequestId(useCaseValue, args[0]);
             case QUERY_PAGINATED:
                 return useCaseExecutor.executeUseQueryPagination(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
+            case REQUEST_PARAMS:
+                // Enviamos el array de Objects que viajan en la Request
+                return useCaseExecutor.executeUseCaseWithReqParams(useCaseValue, args);
             default:
                 return (ResponseEntity<Object>) joinPoint.proceed();
         }
@@ -73,6 +76,8 @@ public class ArqUseCaseAspect {
                     throw new IllegalArgumentException("Invalid parameters for use case type: " + useCaseType);
                 }
                 break;
+            case REQUEST_PARAMS:
+                break;
             default:
                 throw new IllegalArgumentException("Unknown use case type: " + useCaseType);
         }
@@ -83,8 +88,6 @@ public class ArqUseCaseAspect {
             case CREATE:
                 if (!method.isAnnotationPresent(PostMapping.class)) {
                     throw new IllegalArgumentException("Missing @PostMapping() for use case type: " + useCaseType);
-                    // aqui no se puede realmente anyadir dinamicamente una anotacion a un metodo en tiempo de ejecucion
-                    // Se supone que las anotaciones ya estÃ¡n presentes o se manejan en la definiciÃ³n inicial
                 }
                 break;
             case UPDATE:
@@ -102,15 +105,9 @@ public class ArqUseCaseAspect {
                     throw new IllegalArgumentException("Missing @DeleteMapping(\"{id}\") for use case type: " + useCaseType);
 
                 }
-                if (!isAnnotationPresentWithValue(method, DeleteMapping.class, "{id}")) {
-                    throw new IllegalArgumentException("Missing @DeleteMapping(\"{id}\") for use case type: " + useCaseType);
-                }
                 break;
             case QUERY_BY_ID:
                 if (!method.isAnnotationPresent(GetMapping.class)) {
-                    throw new IllegalArgumentException("Missing @GetMapping(\"{id}\") for use case type: " + useCaseType);
-                }
-                if (!isAnnotationPresentWithValue(method, GetMapping.class, "{id}")) {
                     throw new IllegalArgumentException("Missing @GetMapping(\"{id}\") for use case type: " + useCaseType);
                 }
                 break;
@@ -118,17 +115,18 @@ public class ArqUseCaseAspect {
                 if (!method.isAnnotationPresent(PostMapping.class)) {
                     throw new IllegalArgumentException("Missing @PostMapping(\"consulta\") for use case type: " + useCaseType);
                 }
-                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consulta")) {
-                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta\") for use case type: " + useCaseType);
-                }
                 break;
             case QUERY_PAGINATED:
                 if (!method.isAnnotationPresent(PostMapping.class)) {
                     throw new IllegalArgumentException("Missing @PostMapping(\"consulta-paginada\") for use case type: " + useCaseType);
                 }
-                if (!isAnnotationPresentWithValue(method, PostMapping.class, "consulta-paginada")) {
-                    throw new IllegalArgumentException("Missing @PostMapping(\"consulta-paginada\") for use case type: " + useCaseType);
+                break;
+            case REQUEST_PARAMS:
+                if (!method.isAnnotationPresent(GetMapping.class)) {
+                    throw new IllegalArgumentException("Missing @GetMapping(\"...\") for use case type: " + useCaseType);
                 }
+                break;
+            default:
                 break;
         }
     }

@@ -1,4 +1,4 @@
-package muface.arch.command.usecase;
+package muface.arch.aspect;
 public enum ArqUseCaseType {
     CREATE,
     UPDATE,
@@ -6,7 +6,8 @@ public enum ArqUseCaseType {
     DELETE_BY_ID,
     QUERY_BY_ID,
     QUERY_BY_PARAMS,
-    QUERY_PAGINATED
+    QUERY_PAGINATED,
+    REQUEST_PARAMS
 }
 
 

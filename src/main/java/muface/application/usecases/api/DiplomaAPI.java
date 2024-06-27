@@ -2,7 +2,7 @@ package muface.application.usecases.api;
 
 import muface.application.domain.valueobject.DiplomaDTO;
 import muface.arch.aspect.ArqUseCaseDefinition;
-import muface.arch.command.usecase.ArqUseCaseType;
+import muface.arch.aspect.ArqUseCaseType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "diplomas")
 public class DiplomaAPI {
-
     @ArqUseCaseDefinition(value = "CrearDiplomaUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping
     public ResponseEntity<Object> crear(@RequestBody DiplomaDTO dtoInBody) {
         return ResponseEntity.ok("");
     }
-
     @ArqUseCaseDefinition(value = "ActualizarDiplomaUseCase", type = ArqUseCaseType.UPDATE)
     @PutMapping
     public ResponseEntity<Object> actualizar(@RequestBody DiplomaDTO dtoInBody) {

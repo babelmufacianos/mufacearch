@@ -2,7 +2,6 @@ package muface.arch.aspect;
 
 import muface.arch.command.IArqDTO;
 import muface.arch.command.usecase.ArqUseCaseExecutor;
-import muface.arch.command.usecase.ArqUseCaseType;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.reflect.MethodSignature;

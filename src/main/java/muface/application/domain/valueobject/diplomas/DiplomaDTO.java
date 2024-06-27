@@ -23,6 +23,7 @@ public class DiplomaDTO implements IArqDTO<Serializable, IDiploma> {
     private String titulacion;
 
     /** campo calculado transient que no está en el modelo (entidad-relacional o document-non-relational) **/
+    @JsonIgnore
     private String continente;
 
     public DiplomaDTO() {

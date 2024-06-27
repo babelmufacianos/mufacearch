@@ -18,10 +18,13 @@ import java.util.List;
 @Service
 public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
-    /*** métodos personalizados ***/
-
-    public DiplomaService(@Qualifier("diplomaJPARepository") CrudRepository repo,
+    /*public DiplomaService(@Qualifier("diplomaJPARepository") CrudRepository repo,
                           @Qualifier("diplomaDTOMapper") IArqDTOMapper dtoMapper) {
+        super(repo, dtoMapper);
+    }*/
+
+    public DiplomaService(@Qualifier("diplomaMongoRepository") CrudRepository repo,
+                          @Qualifier("diplomaDocumentDTOMapper") IArqDTOMapper dtoMapper) {
         super(repo, dtoMapper);
     }
 

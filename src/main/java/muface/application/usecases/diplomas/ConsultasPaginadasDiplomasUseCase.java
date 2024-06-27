@@ -15,7 +15,7 @@ public class ConsultasPaginadasDiplomasUseCase extends ArqAbstractUseCasePaginat
     private DiplomaService diplomaService;
 
     public Page<DiplomaDTO> execute(DiplomaDTO diplomaDTO, Pageable pageable) {
-        return this.diplomaService.buscarDiplomasPorNombreDeTitulacion((diplomaDTO.getTitulacion() == null ? "" : diplomaDTO.getTitulacion()), pageable);
+        return diplomaDTO.getTitulacion() == null ? this.diplomaService.buscarTodosPaginados(pageable) : this.diplomaService.buscarDiplomasPorNombreDeTitulacion(diplomaDTO.getTitulacion(), pageable);
     }
 
 

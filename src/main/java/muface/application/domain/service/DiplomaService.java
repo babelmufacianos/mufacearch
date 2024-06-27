@@ -1,8 +1,9 @@
 package muface.application.domain.service;
 
 import muface.application.domain.repository.diplomas.DiplomaRepository;
-import muface.application.domain.valueobject.DiplomaDTO;
+import muface.application.domain.valueobject.diplomas.DiplomaDTO;
 import muface.application.domain.model.Diploma;
+import muface.arch.command.IArqDTOMapper;
 import muface.arch.service.ArqGenericService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +20,9 @@ public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
     /*** métodos personalizados ***/
 
-    public DiplomaService(@Qualifier("diplomaJPARepository") CrudRepository repo) {
-        super(repo);
+    public DiplomaService(@Qualifier("diplomaJPARepository") CrudRepository repo,
+                          @Qualifier("diplomaDTOMapper") IArqDTOMapper dtoMapper) {
+        super(repo, dtoMapper);
     }
 
     public List<DiplomaDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion) {

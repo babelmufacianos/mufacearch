@@ -1,6 +1,6 @@
 package muface.application.usecases.api;
 
-import muface.application.domain.valueobject.DiplomaDTO;
+import muface.application.domain.valueobject.diplomas.DiplomaDTO;
 import muface.arch.aspect.ArqUseCaseDefinition;
 import muface.arch.aspect.ArqUseCaseType;
 import org.springframework.data.domain.Pageable;

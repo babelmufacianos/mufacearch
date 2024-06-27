@@ -1,14 +1,21 @@
-package muface.application.domain.valueobject;
+package muface.application.domain.valueobject.diplomas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import muface.application.domain.model.IDiploma;
 import muface.arch.command.IArqDTO;
 import muface.application.domain.model.Diploma;
 import lombok.Data;
+import muface.arch.command.IArqDTOMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
 
 @Data
-public class DiplomaDTO implements IArqDTO<Long, Diploma> {
+public class DiplomaDTO implements IArqDTO<Serializable, IDiploma> {
 
-    private Long id;
+    private IArqDTOMapper<IDiploma, DiplomaDTO> mapper;
+
+    private Serializable id;
     private Long idCliente;
     private String nombreCompleto;
     private String regionOComarca;
@@ -20,8 +27,12 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
     public DiplomaDTO() {
     }
 
+    public void setDtoMapper(IArqDTOMapper mapperInfered) {
+        this.mapper = mapperInfered;
+    }
+
     @Override
-    public Long getId() {
+    public Serializable getId() {
         return this.id;
     }
 
@@ -40,8 +51,8 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
     }
 
     @Override
-    public void setEntity(Diploma diploma) {
-        this.id = diploma.getId();
+    public void setEntity(IDiploma diploma) {
+        this.id = (Serializable) diploma.getId();
         this.idCliente = diploma.getIdcustomer();
         this.nombreCompleto = diploma.getName();
         this.titulacion = diploma.getTitulo();
@@ -50,8 +61,8 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
 
     @Override
     @JsonIgnore
-    public Diploma getEntity() {
-        Diploma diploma = new Diploma();
+    public IDiploma getEntity() {
+        IDiploma diploma = mapper.getNewInnerInstance();
         diploma.setId(this.id);
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);
@@ -61,7 +72,7 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
     }
 
     @Override
-    public void actualizarEntidad(Diploma diploma) {
+    public void actualizarEntidad(IDiploma diploma) {
         diploma.setId(this.id);
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);

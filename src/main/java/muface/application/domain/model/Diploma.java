@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Diploma")
 @Data
-public class Diploma implements Serializable {
+public class Diploma implements Serializable, IDiploma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +29,10 @@ public class Diploma implements Serializable {
 
     @Column
     private String region;
+    @Override
+    public void setId(Object id) {
+        this.id = (Long) id;
+    }
 
 }
 

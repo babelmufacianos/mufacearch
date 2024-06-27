@@ -1,6 +1,6 @@
 package muface.application.usecases.api;
 
-import muface.application.domain.valueobject.ClienteDocumentDTO;
+import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
 import muface.arch.aspect.ArqUseCaseType;
 import muface.arch.aspect.ArqUseCaseDefinition;
 import org.springframework.data.domain.Pageable;

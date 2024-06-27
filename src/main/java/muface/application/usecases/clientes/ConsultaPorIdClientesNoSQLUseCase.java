@@ -1,7 +1,7 @@
 package muface.application.usecases.clientes;
 
 import muface.application.domain.service.ClienteService;
-import muface.application.domain.valueobject.ClienteDocumentDTO;
+import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
 import muface.arch.command.usecase.ArqAbstractUseCaseById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

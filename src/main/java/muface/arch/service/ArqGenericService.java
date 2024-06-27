@@ -13,6 +13,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
@@ -27,7 +28,7 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
-    @Autowired
+
     private IArqDTOMapper<Serializable, D> mapper;
     @Autowired
     MessageSource messageSource;
@@ -44,8 +45,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         }
     }
 
-    public ArqGenericService(CrudRepository repo) {
+    public ArqGenericService(CrudRepository repo, IArqDTOMapper dtoMapper) {
         setConcreteRepository(repo);
+        mapper = dtoMapper;
     }
 
     protected Object getRepositorio() {
@@ -53,7 +55,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     }
 
     private String getClassOfDTO() {
-        return mapper.newInstance().getEntity().getClass().getSimpleName();
+        return mapper.getNewInnerInstance().getClass().getSimpleName();
     }
 
     protected ArqPortRepository<Object, ID> getRepository() {
@@ -66,6 +68,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         D dto;
         try {
             ArqPortRepository<Object, ID> commandRepo = getRepository();
+            entityDto.setDtoMapper(mapper);
             Serializable entidad = (Serializable) entityDto.getEntity();
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
             dto = mapper.map(entityInserted);
@@ -264,6 +267,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     public List<D> buscarCoincidenciasEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
+        filterObject.setDtoMapper(mapper);
         List<Object> resultadoEntities = commandRepo.findByExampleStricted(filterObject.getEntity());
         return convertirListaEntitiesADtos(resultadoEntities);
     }
@@ -271,6 +275,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     public List<D> buscarCoincidenciasNoEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
+        filterObject.setDtoMapper(mapper);
         List<Object> resultadoEntities = commandRepo.findByExampleNotStricted(filterObject.getEntity());
         return convertirListaEntitiesADtos(resultadoEntities);
     }
@@ -285,6 +290,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
+        filterObject.setDtoMapper(mapper);
         Page<Object> resultado = commandRepo.findByExampleStrictedPaginated(filterObject.getEntity(), newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
@@ -298,6 +304,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
+        filterObject.setDtoMapper(mapper);
         Page<Object> resultado = commandRepo.findByExampleNotStrictedPaginated(filterObject.getEntity(), newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }

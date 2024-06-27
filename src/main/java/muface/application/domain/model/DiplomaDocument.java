@@ -1,6 +1,6 @@
 package muface.application.domain.model;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -10,10 +10,9 @@ import java.io.Serializable;
 
 @Document(collection = "Diploma")
 @Data
-public class DiplomaDocument implements Serializable {
+public class DiplomaDocument implements Serializable, IDiploma {
 
     @Id
-    @org.springframework.data.annotation.Id
     private String id;
 
     @Max(value = 999999, message = "{idCliente.max}")
@@ -26,5 +25,9 @@ public class DiplomaDocument implements Serializable {
 
     private String region;
 
+    @Override
+    public void setId(Object id) {
+        this.id = (String) id;
+    }
 }
 

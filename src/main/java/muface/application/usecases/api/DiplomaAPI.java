@@ -1,16 +1,15 @@
 package muface.application.usecases.api;
 
 import muface.application.domain.valueobject.DiplomaDTO;
-import muface.arch.controller.ArqUseCaseDefinition;
+import muface.arch.aspect.ArqUseCaseDefinition;
 import muface.arch.command.usecase.ArqUseCaseType;
-import muface.arch.controller.ArqBaseRestController;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "diplomas")
-public class DiplomaAPI extends ArqBaseRestController {
+public class DiplomaAPI {
 
     @ArqUseCaseDefinition(value = "CrearDiplomaUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping

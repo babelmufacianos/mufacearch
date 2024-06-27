@@ -8,6 +8,34 @@ arch:
 spring:
   mandatory-file-encoding: UTF-8
 
+  # diplomas bbdd
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    platform: h2
+    initialize: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # clientes bbdd
+  data:
+    mongodb:
+      host: 192.168.1.68
+      port: 27017
+      uri: mongodb://test:test@192.168.1.68:27017/bdMongo
+      database: bdMongo
+
   # Event bus configuration
   kafka:
     bootstrap-servers: localhost:9092
@@ -28,39 +56,12 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    platform: h2
-    initialize: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-
-  # query domain
-  data:
-    mongodb:
-      host: 192.168.1.64
-      port: 27017
-      uri: mongodb://test:test@192.168.1.64:27017/bdMongo
-      database: bdMongo
-
 auditoria:
   data:
     mongodb:
-      host: 192.168.1.64
+      host: 192.168.1.68
       port: 27017
-      uri: mongodb://test:test@192.168.1.64:27017/auditDB
+      uri: mongodb://test:test@192.168.1.68:27017/auditDB
       database: auditDB
 
     sql:
@@ -81,7 +82,7 @@ auditoria:
           issuer-uri: http://localhost/realms/diploma-realm
           jwk-set-uri: http://localhost/realms/diploma-realm/protocol/openid-connect/certs
 
-# escuchando en el puerto 80
+# escuchando en el puerto 80 en el contenedor docker de keycloak
 keycloak:
   realm: diploma-realm
   auth-server-url: http://localhost/auth

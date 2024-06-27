@@ -2,15 +2,14 @@ package muface.application.usecases.api;
 
 import muface.application.domain.valueobject.ClienteDocumentDTO;
 import muface.arch.command.usecase.ArqUseCaseType;
-import muface.arch.controller.ArqBaseRestController;
-import muface.arch.controller.ArqUseCaseDefinition;
+import muface.arch.aspect.ArqUseCaseDefinition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "clientes")
-public class ClienteAPI extends ArqBaseRestController {
+public class ClienteAPI {
 
     @ArqUseCaseDefinition(value = "CrearClienteNoSQLUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping
@@ -57,7 +56,8 @@ public class ClienteAPI extends ArqBaseRestController {
 
     @PostMapping("bienvenido")
     public ResponseEntity<Object> saludar(@RequestParam String param1, @RequestParam String param2) {
-        return this.executeUseCaseWithReqParams("CasoUsoSaludoEspecial", new Object[]{param1, param2});
+        return ResponseEntity.ok("Bienvenido!");
+                //this.executeUseCaseWithReqParams("CasoUsoSaludoEspecial", new Object[]{param1, param2});
     }
 
 

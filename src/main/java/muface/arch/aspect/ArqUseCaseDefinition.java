@@ -1,4 +1,4 @@
-package muface.arch.controller;
+package muface.arch.aspect;
 
 import muface.arch.command.usecase.ArqUseCaseType;
 

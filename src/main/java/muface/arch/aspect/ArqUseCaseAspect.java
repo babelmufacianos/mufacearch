@@ -1,4 +1,4 @@
-package muface.arch.controller;
+package muface.arch.aspect;
 
 import muface.arch.command.IArqDTO;
 import muface.arch.command.usecase.ArqUseCaseExecutor;
@@ -41,7 +41,7 @@ public class ArqUseCaseAspect {
         Object[] args = joinPoint.getArgs();
         validateParameters(useCaseType, args);
 
-        // Aplicar el mapeo HTTP dinÃ¡micamente (Simulado aqui, en realidad no se puede aplicar dinamicamente)
+        // Aplicar el mapeo HTTP dinamicamente (Simulado aqui, en realidad no se puede aplicar dinamicamente)
         Method method = signature.getMethod();
         applyHttpMapping(method, useCaseType);
 

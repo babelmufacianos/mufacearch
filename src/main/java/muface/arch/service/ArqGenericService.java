@@ -4,7 +4,9 @@ import muface.arch.command.IArqDTOMapper;
 import muface.arch.command.IArqDTO;
 import muface.arch.exceptions.ArqBaseOperationsException;
 import muface.arch.exceptions.NotExistException;
+import muface.arch.repository.ArqMongoAdapterRepository;
 import muface.arch.repository.ArqPortRepository;
+import muface.arch.repository.ArqRelationalAdapterRepository;
 import muface.arch.utils.ArqConstantMessages;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
@@ -14,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import java.io.Serializable;
 import java.util.*;
@@ -26,11 +31,21 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     private IArqDTOMapper<Serializable, D> mapper;
     @Autowired
     MessageSource messageSource;
-    @Autowired
-    Map<String, ArqPortRepository<?, ID>> commandRepositories;
 
-    private String getRepositoryEntityOfDTO() {
-        return this.mapper.newInstance().getEntity().getClass().getName();
+    protected ArqPortRepository<Object, ID> repository;
+
+    private void setConcreteRepository(CrudRepository<?, ID> myRepo) {
+        if (myRepo instanceof MongoRepository) {
+            this.repository = new ArqMongoAdapterRepository<>();
+            ((ArqMongoAdapterRepository) this.repository).setMongoRepository((MongoRepository) myRepo);
+        } else {
+            this.repository = new ArqRelationalAdapterRepository<>();
+            ((ArqRelationalAdapterRepository)this.repository).setJpaRepository((JpaRepository) myRepo);
+        }
+    }
+
+    public ArqGenericService(CrudRepository repo) {
+        setConcreteRepository(repo);
     }
 
     protected Object getRepositorio() {
@@ -42,14 +57,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     }
 
     protected ArqPortRepository<Object, ID> getRepository() {
-        String entityClassName = mapper.newInstance().getEntity().getClass().getName();
-        for (String repoName : commandRepositories.keySet()) {
-            if (getRepositoryEntityOfDTO().contentEquals(entityClassName)) {
-                return (ArqPortRepository<Object, ID>) commandRepositories.get(repoName);
-            }
-        }
-        throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
-                new Object[]{"Error recuperando repositorio de la entidad " + entityClassName});
+        return repository;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package muface.application.domain.repository;
+package muface.application.domain.repository.clientes;
 
 import muface.application.domain.model.ClienteDocument;
 import org.springframework.data.domain.Page;

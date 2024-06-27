@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Data
 public class DiplomaDTO implements IArqDTO<Serializable, IDiploma> {
 
+    @JsonIgnore
     private IArqDTOMapper<IDiploma, DiplomaDTO> mapper;
 
     private Serializable id;
@@ -73,7 +74,6 @@ public class DiplomaDTO implements IArqDTO<Serializable, IDiploma> {
 
     @Override
     public void actualizarEntidad(IDiploma diploma) {
-        diploma.setId(this.id);
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);
         diploma.setTitulo(this.titulacion);

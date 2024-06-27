@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
 
+    @JsonIgnore
     private IArqDTOMapper<IDiploma, DiplomaDTO> mapper;
     private String id;
     private String nombre;
@@ -71,7 +72,6 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
 
     @Override
     public void actualizarEntidad(ClienteDocument cliente) {
-        cliente.setId(this.id);
         cliente.setName(this.nombre);
         cliente.setOfficial(this.titulacionOficial);
         cliente.setCountry(this.pais);

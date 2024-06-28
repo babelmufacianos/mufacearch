@@ -17,11 +17,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
 
 @Transactional
@@ -33,7 +30,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Autowired
     MessageSource messageSource;
 
-    protected ArqRepository<Serializable, ID> repository;
+    private final ArqRepository<Serializable, ID> repository;
 
     public ArqGenericService(ArqRepository repo) {
         this.repository = repo;

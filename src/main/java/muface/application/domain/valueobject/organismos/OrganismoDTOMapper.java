@@ -1,7 +1,6 @@
-package muface.application.domain.valueobject;
+package muface.application.domain.valueobject.organismos;
 
 import muface.application.domain.model.Organismo;
-import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
 import muface.arch.command.IArqDTOMapper;
 import org.springframework.stereotype.Component;
 

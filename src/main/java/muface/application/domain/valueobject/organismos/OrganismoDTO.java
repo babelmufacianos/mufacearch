@@ -1,4 +1,4 @@
-package muface.application.domain.valueobject;
+package muface.application.domain.valueobject.organismos;
 
 import muface.application.domain.model.Organismo;
 import muface.arch.command.IArqDTO;

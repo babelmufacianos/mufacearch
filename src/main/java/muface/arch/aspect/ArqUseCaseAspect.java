@@ -53,6 +53,9 @@ public class ArqUseCaseAspect {
                 return useCaseExecutor.executeUseQueryPagination(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
             case REQUEST_PARAMS:
                 // Enviamos el array de Objects que viajan en la Request
+                //TODO: map of param-name: param-value
+                // Map<String, Object> mapaParams = new HashMap<>();
+                // TODO: return useCaseExecutor.executeUseCaseWithReqParams(useCaseValue, mapaParams);
                 return useCaseExecutor.executeUseCaseWithReqParams(useCaseValue, args);
             default:
                 return (ResponseEntity<Object>) joinPoint.proceed();

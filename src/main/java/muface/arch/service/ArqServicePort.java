@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface ArqServicePort<D extends IArqDTO, ID> {
 
-
-
     D insertar(D entity);
 
     D actualizar(D entity) throws NoSuchMethodException;

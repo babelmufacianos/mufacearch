@@ -11,9 +11,5 @@ import java.util.List;
 @Repository
 public interface ClienteMongoRepository extends MongoRepository<ClienteDocument, String>, ClienteRepository {
 
-        List<ClienteDocument> findByOfficial(String titulacion);
-
-        Page<ClienteDocument> findByOfficial(String titulacion, Pageable pageable);
-
 }
 

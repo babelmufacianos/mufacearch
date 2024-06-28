@@ -45,9 +45,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         }
     }
 
-    public ArqGenericService(CrudRepository repo, IArqDTOMapper dtoMapper) {
+    public ArqGenericService(CrudRepository repo) { //}, IArqDTOMapper dtoMapper) {
         setConcreteRepository(repo);
-        mapper = dtoMapper;
+        //mapper = dtoMapper;
     }
 
     protected Object getRepositorio() {

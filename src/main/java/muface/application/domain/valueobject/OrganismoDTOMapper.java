@@ -3,9 +3,11 @@ package muface.application.domain.valueobject;
 import muface.application.domain.model.Organismo;
 import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
 import muface.arch.command.IArqDTOMapper;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
+@Component
 public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
     @Override

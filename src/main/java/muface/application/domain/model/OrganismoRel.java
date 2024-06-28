@@ -1,21 +1,28 @@
 package muface.application.domain.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Organismo")
-public class OrganismoRel extends Organismo {
+@Data
+public class OrganismoRel implements IOrganismo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
+    private Long id;
+
+    @Column
+    private String nombre;
+    @Column
+    private String state;
 
     @Override
-    public void setId(Long id) {
-        super.setId(id);
+    public void setId(Serializable id) {
+        this.id = (Long) id;
     }
 
 }

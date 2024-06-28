@@ -1,7 +1,7 @@
 package muface.application.domain.valueobject.organismos;
 
 import lombok.Data;
-import muface.application.domain.model.Organismo;
+import muface.application.domain.model.IOrganismo;
 import muface.arch.command.IArqDTO;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Component
 @Data
-public class OrganismoDTO implements IArqDTO<Serializable, Organismo> {
+public class OrganismoDTO implements IArqDTO<Serializable, IOrganismo> {
 
     private Long id;
 
@@ -33,13 +33,13 @@ public class OrganismoDTO implements IArqDTO<Serializable, Organismo> {
     }
 
     @Override
-    public void actualizarDTO(Organismo entity) {
+    public void actualizarDTO(IOrganismo entity) {
         this.nombreCompleto = entity.getNombre();
         this.estadoORegion = entity.getState();
     }
 
     @Override
-    public void actualizarEntidad(Organismo entity) {
+    public void actualizarEntidad(IOrganismo entity) {
         entity.setNombre(this.nombreCompleto);
         entity.setState(this.estadoORegion);
     }

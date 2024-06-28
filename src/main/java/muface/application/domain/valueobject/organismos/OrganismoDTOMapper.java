@@ -1,6 +1,6 @@
 package muface.application.domain.valueobject.organismos;
 
-import muface.application.domain.model.Organismo;
+import muface.application.domain.model.IOrganismo;
 import muface.application.domain.model.OrganismoNoSQL;
 import muface.application.domain.model.OrganismoRel;
 import muface.arch.command.IArqDTOMapper;
@@ -17,7 +17,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
     @Override
     public OrganismoDTO map(Serializable entity) {
         OrganismoDTO organismoDTO = new OrganismoDTO();
-        organismoDTO.actualizarDTO((Organismo) entity);
+        organismoDTO.actualizarDTO((IOrganismo) entity);
         return organismoDTO;
     }
 
@@ -27,7 +27,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
     }
 
     @Override
-    public Organismo getNewInnerInstance() {
+    public IOrganismo getNewInnerInstance() {
         if (typeOfRepoImpl.contentEquals(ArqPortRepository.JPA_IMPL)) {
             return new OrganismoRel();
         } else {

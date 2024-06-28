@@ -1,19 +1,24 @@
 package muface.application.domain.model;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document(collection = "Organismo")
-public class OrganismoNoSQL extends Organismo {
+@Data
+public class OrganismoNoSQL implements IOrganismo {
+
     @Id
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
+    private String id;
+
+    private String nombre;
+    private String state;
 
     @Override
-    public void setId(Long id) {
-        super.setId(id);
+    public void setId(Serializable id) {
+        this.id = (String) id;
     }
 
 }

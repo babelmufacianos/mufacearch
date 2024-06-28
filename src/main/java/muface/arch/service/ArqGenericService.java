@@ -27,7 +27,6 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
-    @Autowired
     IArqDTOMapper<IArqDTO> mapper;
     @Autowired
     MessageSource messageSource;

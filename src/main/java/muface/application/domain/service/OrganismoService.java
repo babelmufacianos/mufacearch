@@ -18,6 +18,7 @@ public class OrganismoService extends ArqGenericService<OrganismoDTO, Long> {
 
     /*public DiplomaService(@Qualifier("organismoMongoRepository") CrudRepository repo, organismoDTOMapper dtomapper) {
         super(repo, dtoMapper);
+        organismoDTOMapper.setTypeOfRepoImplementation(ArqPortRepository.MONGO_IMPL);
     }*/
 
 }

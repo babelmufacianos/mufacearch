@@ -16,8 +16,8 @@ import java.util.List;
 @Service
 public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String> {
 
-    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo, ClienteDTOMapper clienteDTOMapper) {
-        super(repo, clienteDTOMapper);
+    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo) {//}, ClienteDTOMapper clienteDTOMapper) {
+        super(repo);//, clienteDTOMapper);
     }
 
     /*** métodos personalizados ***/

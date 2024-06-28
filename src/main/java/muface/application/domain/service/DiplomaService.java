@@ -16,8 +16,8 @@ import java.util.List;
 @Service
 public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
-    public DiplomaService(@Qualifier("diplomaJPARepository") DiplomaRepository repo, DiplomaDTOMapper diplomaDTOMapper) {
-        super(repo, diplomaDTOMapper);
+    public DiplomaService(@Qualifier("diplomaJPARepository") DiplomaRepository repo){//}, DiplomaDTOMapper diplomaDTOMapper) {
+        super(repo);//, diplomaDTOMapper);
     }
 
     public List<DiplomaDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion) {

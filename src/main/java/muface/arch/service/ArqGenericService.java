@@ -28,15 +28,15 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
-    IArqDTOMapper<IArqDTO> mapper;
+    @Autowired
+    IArqDTOMapper<D> mapper;
     @Autowired
     MessageSource messageSource;
 
     protected ArqRepository<Serializable, ID> repository;
 
-    public ArqGenericService(ArqRepository repo, IArqDTOMapper iArqDTOMapper) {
+    public ArqGenericService(ArqRepository repo) {
         this.repository = repo;
-        this.mapper = iArqDTOMapper;
     }
 
     protected PagingAndSortingRepository getRepositorio() {

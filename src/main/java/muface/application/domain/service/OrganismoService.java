@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrganismoService extends ArqGenericService<OrganismoDTO, Long> {
 
-    public OrganismoService(@Qualifier("organismoJPARepository") OrganismoRepository repo, OrganismoDTOMapper organismoDTOMapper) {
-        super(repo, organismoDTOMapper);
+    public OrganismoService(@Qualifier("organismoJPARepository") OrganismoRepository repo){//}, OrganismoDTOMapper organismoDTOMapper) {
+        super(repo);//, organismoDTOMapper);
     }
 
     /*public DiplomaService(@Qualifier("organismoMongoRepository") CrudRepository repo, organismoDTOMapper dtomapper) {

@@ -10,8 +10,6 @@ import java.io.Serializable;
 public class OrganismoDTO implements IArqDTO<Serializable, Organismo> {
 
     private Long id;
-    @JsonIgnore
-    private IArqDTOMapper<Organismo, OrganismoDTO> mapper;
 
     @Override
     public Long getId() {

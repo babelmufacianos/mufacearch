@@ -1,16 +1,12 @@
 package muface.application.domain.valueobject.diplomas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import muface.application.domain.model.IDiploma;
+import muface.application.domain.model.Diploma;
 import muface.arch.command.IArqDTO;
 import lombok.Data;
-import muface.arch.command.IArqDTOMapper;
 
 @Data
-public class DiplomaDTO implements IArqDTO<Long, IDiploma> {
-
-    @JsonIgnore
-    private IArqDTOMapper<IDiploma, DiplomaDTO> mapper;
+public class DiplomaDTO implements IArqDTO<Long, Diploma> {
 
     private Long id;
     private Long idCliente;
@@ -23,11 +19,6 @@ public class DiplomaDTO implements IArqDTO<Long, IDiploma> {
     private String continente;
 
     public DiplomaDTO() {
-    }
-
-    @Override
-    public void setDtoMapper(IArqDTOMapper mapperInfered) {
-        this.mapper = mapperInfered;
     }
 
     @Override
@@ -50,7 +41,7 @@ public class DiplomaDTO implements IArqDTO<Long, IDiploma> {
     }
 
     @Override
-    public void setEntity(IDiploma diploma) {
+    public void setEntity(Diploma diploma) {
         this.id = (Long) diploma.getId();
         this.idCliente = diploma.getIdcustomer();
         this.nombreCompleto = diploma.getName();
@@ -60,8 +51,8 @@ public class DiplomaDTO implements IArqDTO<Long, IDiploma> {
 
     @Override
     @JsonIgnore
-    public IDiploma getEntity() {
-        IDiploma diploma = mapper.getNewInnerInstance();
+    public Diploma getEntity() {
+        Diploma diploma = new Diploma();
         diploma.setId(this.id);
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);
@@ -71,13 +62,12 @@ public class DiplomaDTO implements IArqDTO<Long, IDiploma> {
     }
 
     @Override
-    public void actualizarEntidad(IDiploma diploma) {
+    public void actualizarEntidad(Diploma diploma) {
         diploma.setIdcustomer(this.idCliente);
         diploma.setName(this.nombreCompleto);
         diploma.setTitulo(this.titulacion);
         diploma.setRegion(this.regionOComarca);
     }
-
 
 
 }

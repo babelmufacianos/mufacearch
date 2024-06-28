@@ -28,8 +28,8 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
-
-    private IArqDTOMapper<Serializable, D> mapper;
+    @Autowired
+    IArqDTOMapper<D> mapper;
     @Autowired
     MessageSource messageSource;
 
@@ -68,7 +68,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         D dto;
         try {
             ArqPortRepository<Object, ID> commandRepo = getRepository();
-            entityDto.setDtoMapper(mapper);
             Serializable entidad = (Serializable) entityDto.getEntity();
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
             dto = mapper.map(entityInserted);
@@ -267,7 +266,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     public List<D> buscarCoincidenciasEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        filterObject.setDtoMapper(mapper);
         List<Object> resultadoEntities = commandRepo.findByExampleStricted(filterObject.getEntity());
         return convertirListaEntitiesADtos(resultadoEntities);
     }
@@ -275,7 +273,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     public List<D> buscarCoincidenciasNoEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        filterObject.setDtoMapper(mapper);
         List<Object> resultadoEntities = commandRepo.findByExampleNotStricted(filterObject.getEntity());
         return convertirListaEntitiesADtos(resultadoEntities);
     }
@@ -290,7 +287,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        filterObject.setDtoMapper(mapper);
         Page<Object> resultado = commandRepo.findByExampleStrictedPaginated(filterObject.getEntity(), newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
@@ -304,7 +300,6 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        filterObject.setDtoMapper(mapper);
         Page<Object> resultado = commandRepo.findByExampleNotStrictedPaginated(filterObject.getEntity(), newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }

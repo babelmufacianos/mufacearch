@@ -2,11 +2,11 @@ package muface.arch.command;
 
 import java.io.Serializable;
 
-public interface IArqDTOMapper<S extends Serializable, D extends IArqDTO> {
-    D map(S entity);
+public interface IArqDTOMapper<D extends IArqDTO> {
+    D map(Serializable entity);
 
     D newInstance();
 
-    S getNewInnerInstance();
+    Serializable getNewInnerInstance();
 
 }

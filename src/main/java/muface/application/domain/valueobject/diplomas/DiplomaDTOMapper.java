@@ -4,13 +4,15 @@ import muface.application.domain.model.Diploma;
 import muface.arch.command.IArqDTOMapper;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
-public class DiplomaDTOMapper implements IArqDTOMapper<Diploma, DiplomaDTO> {
+public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
 
     @Override
-    public DiplomaDTO map(Diploma entity) {
+    public DiplomaDTO map(Serializable entity) {
         DiplomaDTO diplomaDTO = new DiplomaDTO();
-        diplomaDTO.setEntity(entity);
+        diplomaDTO.setEntity((Diploma) entity);
         return diplomaDTO;
     }
 
@@ -20,8 +22,10 @@ public class DiplomaDTOMapper implements IArqDTOMapper<Diploma, DiplomaDTO> {
     }
 
     @Override
-    public Diploma getNewInnerInstance() {
+    public Serializable getNewInnerInstance() {
         return new Diploma();
     }
 
 }
+
+

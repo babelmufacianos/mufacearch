@@ -4,12 +4,14 @@ import muface.application.domain.model.ClienteDocument;
 import muface.arch.command.IArqDTOMapper;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
-public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocument, ClienteDocumentDTO> {
+public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
     @Override
-    public ClienteDocumentDTO map(ClienteDocument entity) {
+    public ClienteDocumentDTO map(Serializable entity) {
         ClienteDocumentDTO diplomaDTO = new ClienteDocumentDTO();
-        diplomaDTO.setEntity(entity);
+        diplomaDTO.setEntity((ClienteDocument) entity);
         return diplomaDTO;
     }
 
@@ -19,8 +21,7 @@ public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocument, ClienteD
     }
 
     @Override
-    public ClienteDocument getNewInnerInstance() {
+    public Serializable getNewInnerInstance() {
         return new ClienteDocument();
     }
-
 }

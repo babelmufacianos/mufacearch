@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Table(name = "Diploma")
 @Document(collection = "Diploma")
 @Data
-public class Diploma implements Serializable, IDiploma {
+public class Diploma implements Serializable {
 
     @Id
     @org.springframework.data.annotation.Id
@@ -32,10 +32,6 @@ public class Diploma implements Serializable, IDiploma {
 
     @Column
     private String region;
-    @Override
-    public void setId(Object id) {
-        this.id = (Long) id;
-    }
 
 }
 

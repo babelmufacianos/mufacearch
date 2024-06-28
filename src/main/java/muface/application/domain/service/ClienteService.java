@@ -2,7 +2,6 @@ package muface.application.domain.service;
 
 import muface.application.domain.model.ClienteDocument;
 import muface.application.domain.repository.clientes.ClienteRepository;
-import muface.application.domain.valueobject.clientes.ClienteDTOMapper;
 import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
 import muface.arch.service.ArqGenericService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,8 +15,8 @@ import java.util.List;
 @Service
 public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String> {
 
-    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo) {//}, ClienteDTOMapper clienteDTOMapper) {
-        super(repo);//, clienteDTOMapper);
+    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo) {
+        super(repo);
     }
 
     /*** métodos personalizados ***/

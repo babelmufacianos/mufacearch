@@ -39,23 +39,19 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         this.repository = repo;
     }
 
-    protected PagingAndSortingRepository getRepositorio() {
+    @PostConstruct
+    public void init() {
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            mapper.setTypeOfRepoImplementation("JPA");
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            mapper.setTypeOfRepoImplementation("Mongo");
+        }
+    }
+
+
+    protected ArqRepository getRepositorio() {
         return this.repository;
     }
-
-    /*@PostConstruct
-    public void init() {
-        // Obtener la clase de entidad asociada al repositorio
-        Class<?> entityClass = getEntityClass(this.repository);
-        System.out.println("Entity Class: " + entityClass.getName());
-    }
-
-    private Class<?> getEntityClass(ArqRepository<?, ?> repository) {
-        // Obtener el tipo genérico del repositorio usando reflexión
-        ParameterizedType parameterizedType = (ParameterizedType) repository.getClass().getGenericSuperclass();
-        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        return (Class<?>) actualTypeArguments[0];
-    }*/
 
     private String getClassOfDTO() {
         return mapper.getNewInnerInstance().getClass().getSimpleName();

@@ -19,7 +19,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
     @Override
     public IOrganismo getNewInnerInstance() {
-        if (typeOfRepoImpl.contentEquals("JPA_IMPL")) {
+        if (typeOfRepoImpl.contentEquals(JPA_TYPE)) {
             return new OrganismoRel();
         } else {
             return new OrganismoNoSQL();

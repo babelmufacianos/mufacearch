@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class OrganismoDTO implements IArqDTO<Serializable, IOrganismo> {
 
     private Long id;
-
     private String nombreCompleto;
     private String estadoORegion;
 

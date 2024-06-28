@@ -5,18 +5,10 @@ import muface.arch.command.IArqDTOMapper;
 import muface.arch.repository.ArqPortRepository;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-
 @Component
 public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
 
     private String typeOfRepoImpl = ArqPortRepository.JPA_IMPL;
-    @Override
-    public ClienteDocumentDTO map(Serializable entity) {
-        ClienteDocumentDTO diplomaDTO = new ClienteDocumentDTO();
-        diplomaDTO.actualizarDTO((ClienteDocument) entity);
-        return diplomaDTO;
-    }
 
     @Override
     public ClienteDocumentDTO newInstance() {

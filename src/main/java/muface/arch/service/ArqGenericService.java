@@ -69,7 +69,8 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             Serializable entidad = mapper.getNewInnerInstance();
             entityDto.actualizarEntidad(entidad);
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
-            dto = (D) mapper.map(entityInserted);
+            dto = (D) mapper.newInstance();
+            dto.actualizarEntidad(entityInserted);
             String info = messageSource.getMessage(ArqConstantMessages.CREATED_OK,
                     new Object[]{getClassOfDTO()}, new Locale("es"));
             logger.info(info);
@@ -243,7 +244,8 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         Optional<?> optionalT = commandRepo.findById(id);
         if (optionalT.isPresent()) {
             Serializable entity = (Serializable) optionalT.orElse(null);
-            D dto = (D) mapper.map(entity);
+            D dto = (D) mapper.newInstance();
+            dto.actualizarEntidad(entity);
             return dto;
         } else {
             throw new NotExistException(ArqConstantMessages.RECORD_NOT_FOUND,
@@ -327,7 +329,8 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final Page<D> convertirAPageOfDtos(Page pageimpl, Pageable pageable) {
         List<D> listConverted = new ArrayList<>();
         pageimpl.stream().toList().forEach((entity) -> {
-            D dto = (D) mapper.map((Serializable) entity);
+            D dto = (D) mapper.newInstance();
+            dto.actualizarEntidad(entity);
             listConverted.add(dto);
         });
         return new PageImpl<>(listConverted,
@@ -339,7 +342,8 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final List<D> convertirListaEntitiesADtos(List listaOrigen) {
         List<D> listConverted = new ArrayList<>();
         listaOrigen.stream().toList().forEach((entity) -> {
-            D dto = (D) mapper.map((Serializable) entity);
+            D dto = (D) mapper.newInstance();
+            dto.actualizarEntidad(entity);
             listConverted.add(dto);
         });
         return listConverted;

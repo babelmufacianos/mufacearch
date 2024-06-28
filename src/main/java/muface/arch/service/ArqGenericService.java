@@ -43,7 +43,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         return this.repository;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void init() {
         // Obtener la clase de entidad asociada al repositorio
         Class<?> entityClass = getEntityClass(this.repository);
@@ -55,7 +55,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         ParameterizedType parameterizedType = (ParameterizedType) repository.getClass().getGenericSuperclass();
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         return (Class<?>) actualTypeArguments[0];
-    }
+    }*/
 
     private String getClassOfDTO() {
         return mapper.getNewInnerInstance().getClass().getSimpleName();

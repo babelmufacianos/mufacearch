@@ -5,6 +5,7 @@ import muface.application.domain.valueobject.diplomas.DiplomaDTO;
 import muface.application.domain.model.Diploma;
 import muface.application.domain.valueobject.diplomas.DiplomaDTOMapper;
 import muface.arch.service.ArqGenericService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.List;
 @Service
 public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
-    public DiplomaService(DiplomaRepository repo, DiplomaDTOMapper diplomaDTOMapper) {
+    public DiplomaService(@Qualifier("diplomaJPARepository") DiplomaRepository repo, DiplomaDTOMapper diplomaDTOMapper) {
         super(repo, diplomaDTOMapper);
     }
 

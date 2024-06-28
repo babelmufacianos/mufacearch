@@ -12,7 +12,7 @@ public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
     @Override
     public DiplomaDTO map(Serializable entity) {
         DiplomaDTO diplomaDTO = new DiplomaDTO();
-        diplomaDTO.setEntity((Diploma) entity);
+        diplomaDTO.actualizarDTO((Diploma) entity);
         return diplomaDTO;
     }
 
@@ -22,7 +22,7 @@ public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
     }
 
     @Override
-    public Serializable getNewInnerInstance() {
+    public Diploma getNewInnerInstance() {
         return new Diploma();
     }
 

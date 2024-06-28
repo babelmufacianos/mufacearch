@@ -6,13 +6,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
+
 @Component
 public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
     @Override
     public OrganismoDTO map(Serializable entity) {
         OrganismoDTO organismoDTO = new OrganismoDTO();
-        organismoDTO.setEntity((Organismo) entity);
+        organismoDTO.actualizarDTO((Organismo) entity);
         return organismoDTO;
     }
 
@@ -22,7 +23,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
     }
 
     @Override
-    public Serializable getNewInnerInstance() {
+    public Organismo getNewInnerInstance() {
         return new Organismo();
     }
 

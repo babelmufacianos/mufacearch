@@ -42,22 +42,11 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
     }
 
     @Override
-    public void setEntity(ClienteDocument cliente) {
+    public void actualizarDTO(ClienteDocument cliente) {
         this.id = cliente.getId();
         this.pais = cliente.getCountry();
         this.nombre = cliente.getName();
         this.titulacionOficial = cliente.getOfficial();
-    }
-
-    @Override
-    @JsonIgnore
-    public ClienteDocument getEntity() {
-        ClienteDocument cliente = new ClienteDocument();
-        cliente.setId(this.id);
-        cliente.setName(this.nombre);
-        cliente.setOfficial(this.titulacionOficial);
-        cliente.setCountry(this.pais);
-        return cliente;
     }
 
     @Override

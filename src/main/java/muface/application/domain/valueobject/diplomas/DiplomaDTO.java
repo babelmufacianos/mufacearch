@@ -41,7 +41,7 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
     }
 
     @Override
-    public void setEntity(Diploma diploma) {
+    public void actualizarDTO(Diploma diploma) {
         this.id = (Long) diploma.getId();
         this.idCliente = diploma.getIdcustomer();
         this.nombreCompleto = diploma.getName();
@@ -49,17 +49,6 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
         this.regionOComarca = diploma.getRegion();
     }
 
-    @Override
-    @JsonIgnore
-    public Diploma getEntity() {
-        Diploma diploma = new Diploma();
-        diploma.setId(this.id);
-        diploma.setIdcustomer(this.idCliente);
-        diploma.setName(this.nombreCompleto);
-        diploma.setTitulo(this.titulacion);
-        diploma.setRegion(this.regionOComarca);
-        return diploma;
-    }
 
     @Override
     public void actualizarEntidad(Diploma diploma) {

@@ -13,7 +13,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
@@ -28,11 +27,15 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
+    protected static final String TYPE_REPO_JPA = "JPA";
+    protected static final String TYPE_REPO_MONGO = "MONGO";
+
     @Autowired
-    IArqDTOMapper<D> mapper;
+    IArqDTOMapper<IArqDTO> mapper;
     @Autowired
     MessageSource messageSource;
 
+    private final String typeOfImpl;
     protected ArqPortRepository<Object, ID> repository;
 
     private void setConcreteRepository(CrudRepository<?, ID> myRepo) {
@@ -45,9 +48,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         }
     }
 
-    public ArqGenericService(CrudRepository repo) { //}, IArqDTOMapper dtoMapper) {
+    public ArqGenericService(CrudRepository repo, String typeOfImpl) {
         setConcreteRepository(repo);
-        //mapper = dtoMapper;
+        this.typeOfImpl = typeOfImpl;
     }
 
     protected Object getRepositorio() {
@@ -68,9 +71,10 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         D dto;
         try {
             ArqPortRepository<Object, ID> commandRepo = getRepository();
-            Serializable entidad = (Serializable) entityDto.getEntity();
+            Serializable entidad = mapper.getNewInnerInstance();
+            entityDto.actualizarEntidad(entidad);
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
-            dto = mapper.map(entityInserted);
+            dto = (D) mapper.map(entityInserted);
             String info = messageSource.getMessage(ArqConstantMessages.CREATED_OK,
                     new Object[]{getClassOfDTO()}, new Locale("es"));
             logger.info(info);
@@ -244,7 +248,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         Optional<?> optionalT = commandRepo.findById(id);
         if (optionalT.isPresent()) {
             Serializable entity = (Serializable) optionalT.orElse(null);
-            D dto = mapper.map(entity);
+            D dto = (D) mapper.map(entity);
             return dto;
         } else {
             throw new NotExistException(ArqConstantMessages.RECORD_NOT_FOUND,
@@ -266,14 +270,18 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     public List<D> buscarCoincidenciasEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        List<Object> resultadoEntities = commandRepo.findByExampleStricted(filterObject.getEntity());
+        Serializable entidad = mapper.getNewInnerInstance();
+        filterObject.actualizarEntidad(entidad);
+        List<Object> resultadoEntities = commandRepo.findByExampleStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
     }
 
     @Override
     public List<D> buscarCoincidenciasNoEstricto(D filterObject) {
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        List<Object> resultadoEntities = commandRepo.findByExampleNotStricted(filterObject.getEntity());
+        Serializable entidad = mapper.getNewInnerInstance();
+        filterObject.actualizarEntidad(entidad);
+        List<Object> resultadoEntities = commandRepo.findByExampleNotStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
     }
 
@@ -287,7 +295,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        Page<Object> resultado = commandRepo.findByExampleStrictedPaginated(filterObject.getEntity(), newPageable);
+        Serializable entidad = mapper.getNewInnerInstance();
+        filterObject.actualizarEntidad(entidad);
+        Page<Object> resultado = commandRepo.findByExampleStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 
@@ -300,7 +310,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
                     new Object[]{"Parámetro pageable es nulo"});
         }
         ArqPortRepository<Object, ID> commandRepo = getRepository();
-        Page<Object> resultado = commandRepo.findByExampleNotStrictedPaginated(filterObject.getEntity(), newPageable);
+        Serializable entidad = mapper.getNewInnerInstance();
+        filterObject.actualizarEntidad(entidad);
+        Page<Object> resultado = commandRepo.findByExampleNotStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 
@@ -320,7 +332,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final Page<D> convertirAPageOfDtos(Page pageimpl, Pageable pageable) {
         List<D> listConverted = new ArrayList<>();
         pageimpl.stream().toList().forEach((entity) -> {
-            D dto = mapper.map((Serializable) entity);
+            D dto = (D) mapper.map((Serializable) entity);
             listConverted.add(dto);
         });
         return new PageImpl<>(listConverted,
@@ -332,7 +344,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final List<D> convertirListaEntitiesADtos(List listaOrigen) {
         List<D> listConverted = new ArrayList<>();
         listaOrigen.stream().toList().forEach((entity) -> {
-            D dto = mapper.map((Serializable) entity);
+            D dto = (D) mapper.map((Serializable) entity);
             listConverted.add(dto);
         });
         return listConverted;

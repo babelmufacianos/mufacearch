@@ -11,7 +11,7 @@ public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
     @Override
     public ClienteDocumentDTO map(Serializable entity) {
         ClienteDocumentDTO diplomaDTO = new ClienteDocumentDTO();
-        diplomaDTO.setEntity((ClienteDocument) entity);
+        diplomaDTO.actualizarDTO((ClienteDocument) entity);
         return diplomaDTO;
     }
 
@@ -21,7 +21,7 @@ public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
     }
 
     @Override
-    public Serializable getNewInnerInstance() {
+    public ClienteDocument getNewInnerInstance() {
         return new ClienteDocument();
     }
 }

@@ -1,8 +1,11 @@
 package muface.application.domain.repository.organismos;
 
-import muface.application.domain.model.Organismo;
+import muface.application.domain.model.OrganismoRel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OrganismoJPARepository extends JpaRepository<Organismo, Long>, OrganismoRepository {
+@Repository
+public interface OrganismoJPARepository extends JpaRepository<OrganismoRel, Long>, OrganismoRepository<OrganismoRel, Long> {
 
 }

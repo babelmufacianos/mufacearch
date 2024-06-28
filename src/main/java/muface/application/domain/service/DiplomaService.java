@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
-    public DiplomaService(@Qualifier("diplomaJPARepository") CrudRepository repo) {
+    public DiplomaService(@Qualifier("diplomaJPARepository") DiplomaRepository repo) {
         super(repo);
     }
 

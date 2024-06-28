@@ -7,8 +7,6 @@ arch:
 
 spring:
   mandatory-file-encoding: UTF-8
-  main:
-    allow-bean-definition-overriding: true
 
   # diplomas bbdd
   datasource:
@@ -33,9 +31,9 @@ spring:
   # clientes bbdd
   data:
     mongodb:
-      host: 192.168.1.147
+      host: 192.168.1.68
       port: 27017
-      uri: mongodb://test:test@192.168.1.147:27017/bdMongo
+      uri: mongodb://test:test@192.168.1.68:27017/bdMongo
       database: bdMongo
 
   # Event bus configuration
@@ -61,9 +59,9 @@ spring:
 auditoria:
   data:
     mongodb:
-      host: 192.168.1.147
+      host: 192.168.1.68
       port: 27017
-      uri: mongodb://test:test@192.168.1.147:27017/auditDB
+      uri: mongodb://test:test@192.168.1.68:27017/auditDB
       database: auditDB
 
     sql:

@@ -4,18 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 
 @Entity
 @Table(name = "Diploma")
-@Document(collection = "Diploma")
 @Data
 public class Diploma implements Serializable {
 
     @Id
-    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

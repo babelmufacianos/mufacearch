@@ -4,14 +4,13 @@ import muface.application.domain.model.IOrganismo;
 import muface.application.domain.model.OrganismoNoSQL;
 import muface.application.domain.model.OrganismoRel;
 import muface.arch.command.IArqDTOMapper;
-import muface.arch.repository.ArqPortRepository;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
-    private String typeOfRepoImpl = ArqPortRepository.JPA_IMPL;
+    private String typeOfRepoImpl;
 
     @Override
     public OrganismoDTO newInstance() {
@@ -20,7 +19,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
     @Override
     public IOrganismo getNewInnerInstance() {
-        if (typeOfRepoImpl.contentEquals(ArqPortRepository.JPA_IMPL)) {
+        if (typeOfRepoImpl.contentEquals("JPA_IMPL")) {
             return new OrganismoRel();
         } else {
             return new OrganismoNoSQL();

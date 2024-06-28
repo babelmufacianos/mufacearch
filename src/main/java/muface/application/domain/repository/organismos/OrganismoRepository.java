@@ -1,7 +1,7 @@
 package muface.application.domain.repository.organismos;
 
-import org.springframework.data.repository.CrudRepository;
+import muface.arch.repository.ArqRepository;
 
-public interface OrganismoRepository<T, ID> extends CrudRepository<T, ID> {
+public interface OrganismoRepository<T, ID> extends ArqRepository<T, ID> {
 
 }

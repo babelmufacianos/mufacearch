@@ -5,7 +5,6 @@ import muface.application.domain.valueobject.diplomas.DiplomaDTO;
 import muface.application.domain.model.Diploma;
 import muface.application.domain.valueobject.diplomas.DiplomaDTOMapper;
 import muface.arch.service.ArqGenericService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,13 @@ import java.util.List;
 @Service
 public class DiplomaService extends ArqGenericService<DiplomaDTO, Long> {
 
-    public DiplomaService(@Qualifier("diplomaJPARepository") DiplomaRepository repo, DiplomaDTOMapper diplomaDTOMapper) {
+    public DiplomaService(DiplomaRepository repo, DiplomaDTOMapper diplomaDTOMapper) {
         super(repo, diplomaDTOMapper);
     }
 
     public List<DiplomaDTO> buscarDiplomasPorNombreDeTitulacion(String nameOfTitulacion) {
         List<DiplomaDTO> resultado = new ArrayList<>();
-        DiplomaRepository diplomaRepository = (DiplomaRepository) getRepositorio();
+        DiplomaRepository diplomaRepository = (DiplomaRepository) this.getRepositorio();
         List<Diploma> listaEntities = diplomaRepository.findDiplomasByTitulo(nameOfTitulacion);
         listaEntities.forEach((diploma) -> {
             DiplomaDTO diplomaDTO = new DiplomaDTO();

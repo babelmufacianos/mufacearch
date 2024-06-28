@@ -1,12 +1,11 @@
 package muface.arch.service;
 
+import jakarta.annotation.PostConstruct;
 import muface.arch.command.IArqDTOMapper;
 import muface.arch.command.IArqDTO;
 import muface.arch.exceptions.ArqBaseOperationsException;
 import muface.arch.exceptions.NotExistException;
-import muface.arch.repository.ArqMongoAdapterRepository;
-import muface.arch.repository.ArqPortRepository;
-import muface.arch.repository.ArqRelationalAdapterRepository;
+import muface.arch.repository.ArqRepository;
 import muface.arch.utils.ArqConstantMessages;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
@@ -18,9 +17,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 @Transactional
@@ -31,43 +32,42 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Autowired
     MessageSource messageSource;
 
-    protected ArqPortRepository<Object, ID> repository;
+    protected ArqRepository<Serializable, ID> repository;
 
-    private void setConcreteRepository(CrudRepository<?, ID> myRepo) {
-        if (myRepo instanceof MongoRepository) {
-            this.repository = new ArqMongoAdapterRepository<>();
-            ((ArqMongoAdapterRepository) this.repository).setMongoRepository((MongoRepository) myRepo);
-        } else {
-            this.repository = new ArqRelationalAdapterRepository<>();
-            ((ArqRelationalAdapterRepository)this.repository).setJpaRepository((JpaRepository) myRepo);
-        }
-    }
-
-    public ArqGenericService(CrudRepository repo, IArqDTOMapper iArqDTOMapper) {
-        setConcreteRepository(repo);
+    public ArqGenericService(ArqRepository repo, IArqDTOMapper iArqDTOMapper) {
+        this.repository = repo;
         this.mapper = iArqDTOMapper;
     }
 
-    protected Object getRepositorio() {
-        return getRepository().getRepoImplementation();
+    protected PagingAndSortingRepository getRepositorio() {
+        return this.repository;
+    }
+
+    @PostConstruct
+    public void init() {
+        // Obtener la clase de entidad asociada al repositorio
+        Class<?> entityClass = getEntityClass(this.repository);
+        System.out.println("Entity Class: " + entityClass.getName());
+    }
+
+    private Class<?> getEntityClass(ArqRepository<?, ?> repository) {
+        // Obtener el tipo genérico del repositorio usando reflexión
+        ParameterizedType parameterizedType = (ParameterizedType) repository.getClass().getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        return (Class<?>) actualTypeArguments[0];
     }
 
     private String getClassOfDTO() {
         return mapper.getNewInnerInstance().getClass().getSimpleName();
     }
 
-    protected ArqPortRepository<Object, ID> getRepository() {
-        return repository;
-    }
-
     @Override
     @Transactional
     public D insertar(D entityDto) {
         try {
-            ArqPortRepository<Object, ID> commandRepo = getRepository();
             Serializable entidad = mapper.getNewInnerInstance();
             entityDto.actualizarEntidad(entidad);
-            Serializable entityInserted = (Serializable) commandRepo.save(entidad);
+            Serializable entityInserted = (Serializable) this.repository.save(entidad);
             entityDto.actualizarDTO(entityInserted);
             String info = messageSource.getMessage(ArqConstantMessages.CREATED_OK,
                     new Object[]{getClassOfDTO()}, new Locale("es"));
@@ -89,12 +89,11 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Transactional
     public D actualizar(D entityDto) {
         try {
-            ArqPortRepository<Object, ID> commandRepo = getRepository();
-            Optional<?> optionalT = commandRepo.findById((ID) entityDto.getId());
+            Optional<?> optionalT = this.repository.findById((ID) entityDto.getId());
             if (optionalT.isPresent()) {
                 Serializable searchedInBBDD = (Serializable) optionalT.orElse(null);
                 entityDto.actualizarEntidad(searchedInBBDD); //actualiza los campos que no son ids
-                Serializable updated = (Serializable) commandRepo.save(searchedInBBDD);
+                Serializable updated = (Serializable) this.repository.save(searchedInBBDD);
                 String info = messageSource.getMessage(ArqConstantMessages.UPDATED_OK,
                         new Object[]{getClassOfDTO()}, new Locale("es"));
                 logger.info(info);
@@ -124,11 +123,10 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         }
         String info = "";
         try {
-            ArqPortRepository<Object, ID> commandRepo = getRepository();
-            Optional<?> optionalT = commandRepo.findById(id);
+            Optional<?> optionalT = this.repository.findById(id);
             if (optionalT.isPresent()) {
                 Serializable entity = (Serializable) optionalT.orElse(null);
-                commandRepo.delete(entity);
+                this.repository.delete(entity);
                 info = messageSource.getMessage(ArqConstantMessages.DELETED_OK,
                         new Object[]{getClassOfDTO()}, LocaleContextHolder.getLocale());
                 logger.info(messageSource.getMessage(ArqConstantMessages.DELETED_OK,
@@ -191,15 +189,14 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Transactional
     public String borrarTodos() {
         String info = "";
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
-        List<Object> registros = commandRepo.findAll();
-        if (registros.isEmpty()) {
+        Iterable<Serializable> registros = this.repository.findAll();
+        if (registros.iterator().hasNext()) {
             info = messageSource.getMessage(ArqConstantMessages.NOTHING_TO_DELETE, null,
                     LocaleContextHolder.getLocale());
             logger.info(info);
         } else {
             try {
-                commandRepo.deleteAll();
+                this.repository.deleteAll();
                 info = messageSource.getMessage(ArqConstantMessages.DELETED_ALL_OK,
                         new Object[]{getClassOfDTO()}, LocaleContextHolder.getLocale());
                 logger.info(messageSource.getMessage(ArqConstantMessages.DELETED_ALL_OK,
@@ -218,7 +215,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
 
     @Override
     public List<D> buscarTodos() {
-        List<Object> resultado = this.getRepository().findAll();
+        Iterable<Serializable> resultado = this.repository.findAll();
         return convertirListaEntitiesADtos(resultado);
     }
     @Override
@@ -228,7 +225,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro sort es nulo"});
         }
-        List<Object> resultado = this.getRepository().findAll(sort);
+        Iterable<Serializable> resultado = this.repository.findAll(sort);
         return convertirListaEntitiesADtos(resultado);
     }
 
@@ -238,8 +235,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new NotExistException(ArqConstantMessages.ERROR_BAD_REQUEST,
                     new Object[]{getClassOfDTO(), "id: <null>"});
         }
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
-        Optional<?> optionalT = commandRepo.findById(id);
+        Optional<?> optionalT = this.repository.findById(id);
         if (optionalT.isPresent()) {
             Serializable entity = (Serializable) optionalT.orElse(null);
             D dto = (D) mapper.newInstance();
@@ -257,26 +253,23 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new NotExistException(ArqConstantMessages.ERROR_BAD_REQUEST,
                     new Object[]{getClassOfDTO(), "ids: <null or empty list>"});
         }
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
-        List<Object> resultado = commandRepo.findByIds(ids);
+        Iterable<Serializable> resultado = this.repository.findAllById(ids);
         return convertirListaEntitiesADtos(resultado);
     }
 
     @Override
     public List<D> buscarCoincidenciasEstricto(D filterObject) {
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
         Serializable entidad = mapper.getNewInnerInstance();
         filterObject.actualizarEntidad(entidad);
-        List<Object> resultadoEntities = commandRepo.findByExampleStricted(entidad);
+        List<Serializable> resultadoEntities = this.findByExampleStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
     }
 
     @Override
     public List<D> buscarCoincidenciasNoEstricto(D filterObject) {
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
         Serializable entidad = mapper.getNewInnerInstance();
         filterObject.actualizarEntidad(entidad);
-        List<Object> resultadoEntities = commandRepo.findByExampleNotStricted(entidad);
+        List<Serializable> resultadoEntities = this.findByExampleNotStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
     }
 
@@ -289,10 +282,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro pageable es nulo"});
         }
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
         Serializable entidad = mapper.getNewInnerInstance();
         filterObject.actualizarEntidad(entidad);
-        Page<Object> resultado = commandRepo.findByExampleStrictedPaginated(entidad, newPageable);
+        Page<Serializable> resultado = this.findByExampleStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 
@@ -304,10 +296,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro pageable es nulo"});
         }
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
         Serializable entidad = mapper.getNewInnerInstance();
         filterObject.actualizarEntidad(entidad);
-        Page<Object> resultado = commandRepo.findByExampleNotStrictedPaginated(entidad, newPageable);
+        Page<Serializable> resultado = this.findByExampleNotStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 
@@ -319,8 +310,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro pageable es nulo"});
         }
-        ArqPortRepository<Object, ID> commandRepo = getRepository();
-        Page<Object> resultado = commandRepo.findAllPaginated(newPageable);
+        Page<Serializable> resultado = this.findAllPaginated(newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
     }
 
@@ -337,11 +327,11 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     }
 
 
-    protected final List<D> convertirListaEntitiesADtos(List listaOrigen) {
+    protected final List<D> convertirListaEntitiesADtos(Iterable<Serializable> listaOrigen) {
         List<D> listConverted = new ArrayList<>();
-        listaOrigen.stream().toList().forEach((entity) -> {
+        listaOrigen.forEach((entity) -> {
             D dto = (D) mapper.newInstance();
-            dto.actualizarDTO(entity);
+            dto.actualizarDTO((D) entity);
             listConverted.add(dto);
         });
         return listConverted;
@@ -359,8 +349,71 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             String transformedProperty = dto.getInnerOrderField(property);
             newSort = newSort.and(Sort.by(order.getDirection(), transformedProperty));
         }
-
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), newSort);
     }
+
+    /*** metodos cocinados ***/
+
+    private Page<Serializable> findAllPaginated(Pageable pageable) {
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            return ((JpaRepository)this.repository).findAll(pageable);
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            return ((MongoRepository)this.repository).findAll(pageable);
+        } else {
+            throw new RuntimeException("Not supported repository type");
+        }
+    }
+
+    private List<Serializable> findByExampleStricted(Serializable example) {
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withIgnoreNullValues();
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            return ((JpaRepository)this.repository).findAll(Example.of(example, matcher));
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            return ((MongoRepository)this.repository).findAll(Example.of(example, matcher));
+        } else {
+            throw new RuntimeException("Not supported repository type");
+        }
+    }
+
+    private Page<Serializable> findByExampleStrictedPaginated(Serializable example, Pageable pageable) {
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withIgnoreNullValues();
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            return ((JpaRepository)this.repository).findAll(Example.of(example, matcher), pageable);
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            return ((MongoRepository)this.repository).findAll(Example.of(example, matcher), pageable);
+        } else {
+            throw new RuntimeException("Not supported repository type");
+        }
+    }
+
+    private List<Serializable> findByExampleNotStricted(Serializable example) {
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) // Realiza búsquedas LIKE %valor%
+                .withIgnoreCase(); // Ignorar mayúsculas/minúsculas
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            return ((JpaRepository)this.repository).findAll(Example.of(example, matcher));
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            return ((MongoRepository)this.repository).findAll(Example.of(example, matcher));
+        } else {
+            throw new RuntimeException("Not supported repository type");
+        }
+    }
+
+    private Page<Serializable> findByExampleNotStrictedPaginated(Serializable example, Pageable pageable) {
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) // Realiza búsquedas LIKE %valor%
+                .withIgnoreCase(); // Ignorar mayúsculas/minúsculas
+
+        if (this.getRepositorio() instanceof JpaRepository<?,?>) {
+            return ((JpaRepository)this.repository).findAll(Example.of(example, matcher), pageable);
+        } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
+            return ((MongoRepository)this.repository).findAll(Example.of(example, matcher), pageable);
+        } else {
+            throw new RuntimeException("Not supported repository type");
+        }
+    }
+
 
 }

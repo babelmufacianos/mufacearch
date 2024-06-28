@@ -2,13 +2,12 @@ package muface.application.domain.valueobject.clientes;
 
 import muface.application.domain.model.ClienteDocument;
 import muface.arch.command.IArqDTOMapper;
-import muface.arch.repository.ArqPortRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
 
-    private String typeOfRepoImpl = ArqPortRepository.JPA_IMPL;
+    private String typeOfRepoImpl;
 
     @Override
     public ClienteDocumentDTO newInstance() {

@@ -63,14 +63,12 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @Override
     @Transactional
     public D insertar(D entityDto) {
-        D dto;
         try {
             ArqPortRepository<Object, ID> commandRepo = getRepository();
             Serializable entidad = mapper.getNewInnerInstance();
             entityDto.actualizarEntidad(entidad);
             Serializable entityInserted = (Serializable) commandRepo.save(entidad);
-            dto = (D) mapper.newInstance();
-            dto.actualizarEntidad(entityInserted);
+            entityDto.actualizarDTO(entityInserted);
             String info = messageSource.getMessage(ArqConstantMessages.CREATED_OK,
                     new Object[]{getClassOfDTO()}, new Locale("es"));
             logger.info(info);
@@ -84,7 +82,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.CREATED_KO,
                     new Object[]{getClassOfDTO(), exc.getCause()});
         }
-        return dto;
+        return entityDto;
     }
 
     @Override
@@ -245,7 +243,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         if (optionalT.isPresent()) {
             Serializable entity = (Serializable) optionalT.orElse(null);
             D dto = (D) mapper.newInstance();
-            dto.actualizarEntidad(entity);
+            dto.actualizarDTO(entity);
             return dto;
         } else {
             throw new NotExistException(ArqConstantMessages.RECORD_NOT_FOUND,
@@ -330,7 +328,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         List<D> listConverted = new ArrayList<>();
         pageimpl.stream().toList().forEach((entity) -> {
             D dto = (D) mapper.newInstance();
-            dto.actualizarEntidad(entity);
+            dto.actualizarDTO(entity);
             listConverted.add(dto);
         });
         return new PageImpl<>(listConverted,
@@ -343,7 +341,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         List<D> listConverted = new ArrayList<>();
         listaOrigen.stream().toList().forEach((entity) -> {
             D dto = (D) mapper.newInstance();
-            dto.actualizarEntidad(entity);
+            dto.actualizarDTO(entity);
             listConverted.add(dto);
         });
         return listConverted;

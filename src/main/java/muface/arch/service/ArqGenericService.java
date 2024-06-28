@@ -27,15 +27,11 @@ import java.util.*;
 public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqServicePort<D, ID> {
     Logger logger = LoggerFactory.getLogger(ArqGenericService.class);
 
-    protected static final String TYPE_REPO_JPA = "JPA";
-    protected static final String TYPE_REPO_MONGO = "MONGO";
-
     @Autowired
     IArqDTOMapper<IArqDTO> mapper;
     @Autowired
     MessageSource messageSource;
 
-    private final String typeOfImpl;
     protected ArqPortRepository<Object, ID> repository;
 
     private void setConcreteRepository(CrudRepository<?, ID> myRepo) {
@@ -48,9 +44,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         }
     }
 
-    public ArqGenericService(CrudRepository repo, String typeOfImpl) {
+    public ArqGenericService(CrudRepository repo, IArqDTOMapper iArqDTOMapper) {
         setConcreteRepository(repo);
-        this.typeOfImpl = typeOfImpl;
+        this.mapper = iArqDTOMapper;
     }
 
     protected Object getRepositorio() {

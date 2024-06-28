@@ -9,4 +9,6 @@ public interface IArqDTOMapper<D extends IArqDTO> {
 
     Serializable getNewInnerInstance();
 
+    void setTypeOfRepoImplementation(String typeOfRepoImpl);
+
 }

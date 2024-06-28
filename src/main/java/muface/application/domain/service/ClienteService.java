@@ -4,6 +4,7 @@ import muface.application.domain.model.ClienteDocument;
 import muface.application.domain.repository.clientes.ClienteRepository;
 import muface.application.domain.valueobject.clientes.ClienteDTOMapper;
 import muface.application.domain.valueobject.clientes.ClienteDocumentDTO;
+import muface.arch.repository.ArqPortRepository;
 import muface.arch.service.ArqGenericService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,10 @@ import java.util.List;
 @Service
 public class ClienteService extends ArqGenericService<ClienteDocumentDTO, String> {
 
-    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo, String tyoeImpl) {
-        super(repo, TYPE_REPO_MONGO);
+    public ClienteService(@Qualifier("clienteMongoRepository") ClienteRepository repo,
+                          ClienteDTOMapper clienteDTOMapper) {
+        super(repo, clienteDTOMapper);
+        clienteDTOMapper.setTypeOfRepoImplementation(ArqPortRepository.MONGO_IMPL);
     }
 
     /*** métodos personalizados ***/

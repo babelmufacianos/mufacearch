@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public interface ArqPortRepository<T, ID> {
 
+    public static final String JPA_IMPL = "JPA";
+    public static final String MONGO_IMPL = "MONGO";
+
     Object getRepoImplementation();
 
     String getClassOfEntity();

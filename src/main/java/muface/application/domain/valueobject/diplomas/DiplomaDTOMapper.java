@@ -10,17 +10,17 @@ public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
     private String typeOfRepoImpl;
 
     @Override
-    public DiplomaDTO newInstance() {
+    public DiplomaDTO nuevaInstancia() {
         return new DiplomaDTO();
     }
 
     @Override
-    public Diploma newInstanceOfEntity() {
+    public Diploma nuevaInstanciaEntidad() {
         return new Diploma();
     }
 
     @Override
-    public void setTypeOfRepoImplementation(String typeOfRepoImpl) {
+    public void setJPAONoSQL(String typeOfRepoImpl) {
         this.typeOfRepoImpl = typeOfRepoImpl;
     }
 

@@ -26,7 +26,7 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
         return this.id;
     }
 
-    public String getInnerOrderField(String fieldInDto) {
+    public String mappingDTOAEntity(String fieldInDto) {
         if (fieldInDto.contentEquals("id")) {
             return "id";
         } else if (fieldInDto.contentEquals("idCliente")) {
@@ -42,7 +42,7 @@ public class DiplomaDTO implements IArqDTO<Long, Diploma> {
 
     @Override
     public void actualizarDTO(Diploma diploma) {
-        this.id = (Long) diploma.getId();
+        this.id = diploma.getId();
         this.idCliente = diploma.getIdcustomer();
         this.nombreCompleto = diploma.getName();
         this.titulacion = diploma.getTitulo();

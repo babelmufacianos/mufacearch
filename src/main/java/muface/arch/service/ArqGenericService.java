@@ -39,9 +39,9 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     @PostConstruct
     public void init() {
         if (this.getRepositorio() instanceof JpaRepository<?,?>) {
-            mapper.setTypeOfRepoImplementation("JPA");
+            mapper.setJPAONoSQL("JPA");
         } else if (this.getRepositorio() instanceof MongoRepository<?,?>) {
-            mapper.setTypeOfRepoImplementation("Mongo");
+            mapper.setJPAONoSQL("Mongo");
         }
     }
 
@@ -51,14 +51,14 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     }
 
     private String getClassOfDTO() {
-        return mapper.newInstanceOfEntity().getClass().getSimpleName();
+        return mapper.nuevaInstanciaEntidad().getClass().getSimpleName();
     }
 
     @Override
     @Transactional
     public D insertar(D entityDto) {
         try {
-            Serializable entidad = mapper.newInstanceOfEntity();
+            Serializable entidad = mapper.nuevaInstanciaEntidad();
             entityDto.actualizarEntidad(entidad);
             Serializable entityInserted = (Serializable) this.repository.save(entidad);
             entityDto.actualizarDTO(entityInserted);
@@ -231,7 +231,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
         Optional<?> optionalT = this.repository.findById(id);
         if (optionalT.isPresent()) {
             Serializable entity = (Serializable) optionalT.orElse(null);
-            D dto = (D) mapper.newInstance();
+            D dto = (D) mapper.nuevaInstancia();
             dto.actualizarDTO(entity);
             return dto;
         } else {
@@ -252,7 +252,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
 
     @Override
     public List<D> buscarCoincidenciasEstricto(D filterObject) {
-        Serializable entidad = mapper.newInstanceOfEntity();
+        Serializable entidad = mapper.nuevaInstanciaEntidad();
         filterObject.actualizarEntidad(entidad);
         List<Serializable> resultadoEntities = this.findByExampleStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
@@ -260,7 +260,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
 
     @Override
     public List<D> buscarCoincidenciasNoEstricto(D filterObject) {
-        Serializable entidad = mapper.newInstanceOfEntity();
+        Serializable entidad = mapper.nuevaInstanciaEntidad();
         filterObject.actualizarEntidad(entidad);
         List<Serializable> resultadoEntities = this.findByExampleNotStricted(entidad);
         return convertirListaEntitiesADtos(resultadoEntities);
@@ -275,7 +275,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro pageable es nulo"});
         }
-        Serializable entidad = mapper.newInstanceOfEntity();
+        Serializable entidad = mapper.nuevaInstanciaEntidad();
         filterObject.actualizarEntidad(entidad);
         Page<Serializable> resultado = this.findByExampleStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
@@ -289,7 +289,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
                     new Object[]{"Parámetro pageable es nulo"});
         }
-        Serializable entidad = mapper.newInstanceOfEntity();
+        Serializable entidad = mapper.nuevaInstanciaEntidad();
         filterObject.actualizarEntidad(entidad);
         Page<Serializable> resultado = this.findByExampleNotStrictedPaginated(entidad, newPageable);
         return convertirAPageOfDtos(resultado, newPageable);
@@ -297,7 +297,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
 
     @Override
     public Page<D> buscarTodosPaginados(Pageable pageable) {
-        Pageable newPageable = mapearCamposOrdenacionDeEntidad(mapper.newInstance(), pageable);
+        Pageable newPageable = mapearCamposOrdenacionDeEntidad(mapper.nuevaInstancia(), pageable);
         if (newPageable == null) {
             logger.error("Parámetro pageable es nulo");
             throw new ArqBaseOperationsException(ArqConstantMessages.ERROR_INTERNAL_SERVER_ERROR,
@@ -310,7 +310,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final Page<D> convertirAPageOfDtos(Page pageimpl, Pageable pageable) {
         List<D> listConverted = new ArrayList<>();
         pageimpl.stream().toList().forEach((entity) -> {
-            D dto = (D) mapper.newInstance();
+            D dto = (D) mapper.nuevaInstancia();
             dto.actualizarDTO(entity);
             listConverted.add(dto);
         });
@@ -323,7 +323,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
     protected final List<D> convertirListaEntitiesADtos(Iterable<Serializable> listaOrigen) {
         List<D> listConverted = new ArrayList<>();
         listaOrigen.forEach((entity) -> {
-            D dto = (D) mapper.newInstance();
+            D dto = (D) mapper.nuevaInstancia();
             dto.actualizarDTO((D) entity);
             listConverted.add(dto);
         });
@@ -339,7 +339,7 @@ public abstract class ArqGenericService<D extends IArqDTO, ID> implements ArqSer
 
         for (Sort.Order order : originalSort) {
             String property = order.getProperty();
-            String transformedProperty = dto.getInnerOrderField(property);
+            String transformedProperty = dto.mappingDTOAEntity(property);
             newSort = newSort.and(Sort.by(order.getDirection(), transformedProperty));
         }
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), newSort);

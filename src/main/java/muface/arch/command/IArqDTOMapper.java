@@ -5,10 +5,10 @@ import java.io.Serializable;
 public interface IArqDTOMapper<D extends IArqDTO> {
 
     public static final String JPA_TYPE = "JPA";
-    D newInstance();
+    D nuevaInstancia();
 
-    Serializable newInstanceOfEntity();
+    Serializable nuevaInstanciaEntidad();
 
-    void setTypeOfRepoImplementation(String typeOfRepoImpl);
+    void setJPAONoSQL(String typeOfRepoImpl);
 
 }

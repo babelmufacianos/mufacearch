@@ -10,17 +10,17 @@ public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
     private String typeOfRepoImpl;
 
     @Override
-    public ClienteDocumentDTO newInstance() {
+    public ClienteDocumentDTO nuevaInstancia() {
         return new ClienteDocumentDTO();
     }
 
     @Override
-    public ClienteDocument newInstanceOfEntity() {
+    public ClienteDocument nuevaInstanciaEntidad() {
         return new ClienteDocument();
     }
 
     @Override
-    public void setTypeOfRepoImplementation(String typeOfRepoImpl) {
+    public void setJPAONoSQL(String typeOfRepoImpl) {
         this.typeOfRepoImpl = typeOfRepoImpl;
     }
 

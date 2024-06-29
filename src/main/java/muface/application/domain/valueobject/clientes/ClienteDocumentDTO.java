@@ -1,6 +1,5 @@
 package muface.application.domain.valueobject.clientes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import muface.arch.command.IArqDTO;
 import muface.application.domain.model.ClienteDocument;
@@ -27,7 +26,7 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
     }
 
     @Override
-    public String getInnerOrderField(String fieldInDto) {
+    public String mappingDTOAEntity(String fieldInDto) {
         if (fieldInDto.contentEquals("id")) {
             return "id";
         } else if (fieldInDto.contentEquals("titulacionOficial")) {

@@ -7,7 +7,7 @@ public interface IArqDTO<ID, D> extends Serializable {
 
     ID getId();
 
-    String getInnerOrderField(String fieldInDto);
+    String mappingDTOAEntity(String fieldInDto);
 
     void actualizarDTO(D entity);
 

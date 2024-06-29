@@ -21,7 +21,7 @@ public class OrganismoDTO implements IArqDTO<Serializable, IOrganismo> {
     }
 
     @Override
-    public String getInnerOrderField(String fieldInDto) {
+    public String mappingDTOAEntity(String fieldInDto) {
         if ("nombreCompleto".contentEquals(fieldInDto)) {
             return "nombre";
         } else if ("estadoORegion".contentEquals(fieldInDto)) {

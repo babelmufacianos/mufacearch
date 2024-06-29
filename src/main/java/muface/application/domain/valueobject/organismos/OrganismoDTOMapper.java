@@ -13,12 +13,12 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
     private String typeOfRepoImpl;
 
     @Override
-    public OrganismoDTO newInstance() {
+    public OrganismoDTO nuevaInstancia() {
         return new OrganismoDTO();
     }
 
     @Override
-    public IOrganismo newInstanceOfEntity() {
+    public IOrganismo nuevaInstanciaEntidad() {
         if (typeOfRepoImpl.contentEquals(JPA_TYPE)) {
             return new OrganismoRel();
         } else {
@@ -27,7 +27,7 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
     }
 
     @Override
-    public void setTypeOfRepoImplementation(String typeOfRepoImpl) {
+    public void setJPAONoSQL(String typeOfRepoImpl) {
         this.typeOfRepoImpl = typeOfRepoImpl;
     }
 

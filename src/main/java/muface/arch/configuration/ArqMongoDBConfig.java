@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
-//@ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "mongo", matchIfMissing = false)
 public class ArqMongoDBConfig {
 
     @Primary
@@ -26,7 +25,6 @@ public class ArqMongoDBConfig {
 
     @Primary
     @Bean(name = "bdMongoTemplate")
-    //@ConditionalOnProperty(name = "arch.repository-type.active", havingValue = "mongo", matchIfMissing = false)
     public MongoTemplate bdMongoTemplate(MongoCustomConversions custombdMongoConversions) {
         MongoProperties mongoProperties = bdMongoProperties();
         MongoDatabaseFactory myMongoDbFactory = new SimpleMongoClientDatabaseFactory(

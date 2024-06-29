@@ -15,7 +15,7 @@ public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
     }
 
     @Override
-    public Diploma getNewInnerInstance() {
+    public Diploma newInstanceOfEntity() {
         return new Diploma();
     }
 

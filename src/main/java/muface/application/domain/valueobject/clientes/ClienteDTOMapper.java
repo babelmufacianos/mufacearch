@@ -15,7 +15,7 @@ public class ClienteDTOMapper implements IArqDTOMapper<ClienteDocumentDTO> {
     }
 
     @Override
-    public ClienteDocument getNewInnerInstance() {
+    public ClienteDocument newInstanceOfEntity() {
         return new ClienteDocument();
     }
 

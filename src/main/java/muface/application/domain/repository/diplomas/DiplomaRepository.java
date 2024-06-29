@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface DiplomaRepository extends JpaRepository<Diploma, Long>, ArqRepository<Diploma, Long> {
+
     List<Diploma> findDiplomasByTitulo(String titulo);
 
     Page<Diploma> findDiplomasByTitulo(String titulo, Pageable pageable);

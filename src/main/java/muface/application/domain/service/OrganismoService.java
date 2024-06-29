@@ -13,7 +13,7 @@ public class OrganismoService extends ArqGenericService<OrganismoDTO, Long> {
         super(repo);
     }
 
-    /*public DiplomaService(@Qualifier("organismoMongoRepository") OrganismoRepository repo) {
+    /*public DiplomaService(@Qualifier("organismoMongoRepository") ArqRepository repo) {
         super(repo);
     }*/
 

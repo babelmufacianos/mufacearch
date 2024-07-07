@@ -3,14 +3,12 @@ package muface.application.domain.valueobject.organismos;
 import muface.application.domain.model.IOrganismo;
 import muface.application.domain.model.OrganismoNoSQL;
 import muface.application.domain.model.OrganismoRel;
-import muface.arch.command.IArqDTOMapper;
+import muface.arch.command.ArqAbstractDTOMapper;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
-
-    private String typeOfRepoImpl;
+public class OrganismoDTOMapper extends ArqAbstractDTOMapper<OrganismoDTO> {
 
     @Override
     public OrganismoDTO nuevaInstancia() {
@@ -19,17 +17,13 @@ public class OrganismoDTOMapper implements IArqDTOMapper<OrganismoDTO> {
 
     @Override
     public IOrganismo nuevaInstanciaEntidad() {
-        if (typeOfRepoImpl.contentEquals(JPA_TYPE)) {
+        if (getTypeOfRepoImpl().contentEquals(JPA_TYPE)) {
             return new OrganismoRel();
         } else {
             return new OrganismoNoSQL();
         }
     }
 
-    @Override
-    public void setJPAONoSQL(String typeOfRepoImpl) {
-        this.typeOfRepoImpl = typeOfRepoImpl;
-    }
 
 
 }

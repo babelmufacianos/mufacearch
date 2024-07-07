@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "diplomas")
 public class DiplomaAPI {
+
     @ArqUseCaseDefinition(value = "CrearDiplomaUseCase", type = ArqUseCaseType.CREATE)
     @PostMapping
     public ResponseEntity<Object> crear(@RequestBody DiplomaDTO dtoInBody) {
         return ResponseEntity.ok("");
     }
+
     @ArqUseCaseDefinition(value = "ActualizarDiplomaUseCase", type = ArqUseCaseType.UPDATE)
     @PutMapping
     public ResponseEntity<Object> actualizar(@RequestBody DiplomaDTO dtoInBody) {
@@ -48,6 +50,13 @@ public class DiplomaAPI {
     @ArqUseCaseDefinition(value = "ConsultasPaginadasDiplomasUseCase", type = ArqUseCaseType.QUERY_PAGINATED)
     @PostMapping("consulta-paginada")
     public ResponseEntity<Object> consultaPaginadaPorCampos(@RequestBody DiplomaDTO filter, Pageable pageable) {
+        return ResponseEntity.ok("");
+    }
+
+    @ArqUseCaseDefinition(value = "CasoUsoPersonalizado", type = ArqUseCaseType.REQUEST_PARAMS)
+    @GetMapping("montarfrase")
+    public ResponseEntity<Object> montarfrase(@RequestParam String name, @RequestParam String genero,
+                                              @RequestParam String localidad) {
         return ResponseEntity.ok("");
     }
 

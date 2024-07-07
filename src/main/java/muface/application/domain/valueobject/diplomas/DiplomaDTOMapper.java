@@ -1,13 +1,11 @@
 package muface.application.domain.valueobject.diplomas;
 
 import muface.application.domain.model.Diploma;
-import muface.arch.command.IArqDTOMapper;
+import muface.arch.command.ArqAbstractDTOMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
-
-    private String typeOfRepoImpl;
+public class DiplomaDTOMapper extends ArqAbstractDTOMapper<DiplomaDTO> {
 
     @Override
     public DiplomaDTO nuevaInstancia() {
@@ -19,10 +17,6 @@ public class DiplomaDTOMapper implements IArqDTOMapper<DiplomaDTO> {
         return new Diploma();
     }
 
-    @Override
-    public void setJPAONoSQL(String typeOfRepoImpl) {
-        this.typeOfRepoImpl = typeOfRepoImpl;
-    }
 
 }
 

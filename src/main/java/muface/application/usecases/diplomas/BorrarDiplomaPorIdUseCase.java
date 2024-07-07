@@ -3,13 +3,13 @@ package muface.application.usecases.diplomas;
 
 import jakarta.transaction.Transactional;
 import muface.application.domain.service.DiplomaService;
-import muface.arch.command.usecase.ArqAbstractUseCaseDeleteById;
+import muface.arch.command.ArqAbstractUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class BorrarDiplomaPorIdUseCase extends ArqAbstractUseCaseDeleteById<String, Long> {
+public class BorrarDiplomaPorIdUseCase extends ArqAbstractUseCase<String, Long> {
 
     @Autowired
     private DiplomaService diplomaService;

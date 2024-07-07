@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Data
 @Document(collection = "clientes")
-public class ClienteDocument implements Serializable {
+public class CustomerDocument implements Serializable {
 
     @Id
     private String id;

@@ -2,11 +2,11 @@ package muface.application.domain.valueobject.diplomas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import muface.application.domain.model.Diploma;
-import muface.arch.command.IArqDTO;
+import muface.arch.command.ArqAbstractDTO;
 import lombok.Data;
 
 @Data
-public class DiplomaDTO implements IArqDTO<Long, Diploma> {
+public class DiplomaDTO extends ArqAbstractDTO<Long, Diploma> {
 
     private Long id;
     private Long idCliente;

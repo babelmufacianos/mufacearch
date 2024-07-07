@@ -1,7 +1,7 @@
 package muface.application.usecases.diplomas;
 
 import muface.application.domain.service.DiplomaService;
-import muface.arch.command.usecase.ArqAbstractUseCase;
+import muface.arch.command.ArqAbstractUseCase;
 import muface.application.domain.valueobject.diplomas.DiplomaDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ public class CrearDiplomaUseCase extends ArqAbstractUseCase<DiplomaDTO, DiplomaD
 
     @Autowired
     private DiplomaService diplomaService;
+
     @Override
     @Transactional
     public DiplomaDTO execute(DiplomaDTO diplomaDTO) {

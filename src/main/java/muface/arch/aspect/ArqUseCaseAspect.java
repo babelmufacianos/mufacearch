@@ -1,11 +1,16 @@
 package muface.arch.aspect;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import muface.arch.command.IArqCommand;
 import muface.arch.command.IArqDTO;
-import muface.arch.command.usecase.ArqUseCaseExecutor;
+import muface.arch.exceptions.ArqBussinessRuleException;
+import muface.arch.exceptions.NotExistException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,45 +23,59 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Aspect
 @Component
 public class ArqUseCaseAspect {
+
     @Autowired
-    protected ArqUseCaseExecutor useCaseExecutor;
+    ApplicationContext applicationContext;
 
     public void arqUseCaseDefinitionPointcut() {
         // Pointcut para métodos anotados con @ArqUseCaseDefinition
         int a = 0;
     }
 
+    @Transactional
+    private final ResponseEntity<Object> executeUseCase(IArqCommand useCase, Object paramObj) {
+        try {
+            return ResponseEntity.ok(useCase.executeInner(paramObj));
+        } catch (ConstraintViolationException | NotExistException | ArqBussinessRuleException excConstraint) {
+            throw excConstraint;
+        } catch (Throwable exc) {
+            throw new ArqBussinessRuleException(exc.getMessage(), null);
+        }
+    }
+
     @Around("@annotation(ArqUseCaseDefinition)")
     public ResponseEntity<Object> handleUseCase(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        ArqUseCaseDefinition useCaseDefinition = signature.getMethod().getAnnotation(ArqUseCaseDefinition.class);
+        Method method = signature.getMethod();
+        ArqUseCaseDefinition useCaseDefinition = method.getAnnotation(ArqUseCaseDefinition.class);
         String useCaseValue = useCaseDefinition.value();
         ArqUseCaseType useCaseType = useCaseDefinition.type();
 
         Object[] args = joinPoint.getArgs();
-        validateParameters(useCaseType, args);
+        Map<String, Object> params = getMethodParameters(method, args);
 
         // Aplicar el mapeo HTTP dinamicamente (Simulado aqui, en realidad no se puede aplicar dinamicamente)
-        Method method = signature.getMethod();
         applyHttpMapping(method, useCaseType);
+        Object useCase = applicationContext.getBean(useCaseValue.substring(0,1).toLowerCase() + useCaseValue.substring(1));
+        if (useCase == null) {
+            throw new RuntimeException("El caso de Uso <" + useCaseValue + "> no existe");
+        }
 
         switch (useCaseType) {
-            case CREATE, UPDATE, DELETE, QUERY_BY_PARAMS:
-                return useCaseExecutor.executeUseCaseWithRequestBody(useCaseValue, (IArqDTO) args[0]);
-            case DELETE_BY_ID, QUERY_BY_ID:
-                return useCaseExecutor.executeUseCaseWithRequestId(useCaseValue, args[0]);
+            case CREATE, UPDATE, DELETE, DELETE_BY_ID, QUERY_BY_ID, QUERY_BY_PARAMS:
+                return executeUseCase((IArqCommand) useCase, args[0]);
             case QUERY_PAGINATED:
-                return useCaseExecutor.executeUseQueryPagination(useCaseValue, (IArqDTO) args[0], (Pageable) args[1]);
+                ((IArqDTO) args[0]).setPageable((Pageable) args[1]);
+                return executeUseCase((IArqCommand) useCase, args[0]);
             case REQUEST_PARAMS:
-                // Enviamos el array de Objects que viajan en la Request
-                //TODO: map of param-name: param-value
-                // Map<String, Object> mapaParams = new HashMap<>();
-                // TODO: return useCaseExecutor.executeUseCaseWithReqParams(useCaseValue, mapaParams);
-                return useCaseExecutor.executeUseCaseWithReqParams(useCaseValue, args);
+                return executeUseCase((IArqCommand) useCase, params);
             default:
                 return (ResponseEntity<Object>) joinPoint.proceed();
         }
@@ -153,6 +172,16 @@ public class ArqUseCaseAspect {
         }
 
         return false;
+    }
+
+
+    private Map<String, Object> getMethodParameters(Method method, Object[] args) {
+        Map<String, Object> params = new HashMap<>();
+        Parameter[] parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            params.put(parameters[i].getName(), args[i]);
+        }
+        return params;
     }
 
 

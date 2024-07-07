@@ -1,20 +1,19 @@
-package muface.application.domain.valueobject.clientes;
+package muface.application.domain.valueobject.customers;
 
 import lombok.Data;
-import muface.arch.command.IArqDTO;
-import muface.application.domain.model.ClienteDocument;
-import org.springframework.stereotype.Component;
+import muface.arch.command.ArqAbstractDTO;
+import muface.application.domain.model.CustomerDocument;
 
-@Component
+
 @Data
-public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
+public class CustomerDocumentDTO extends ArqAbstractDTO<String, CustomerDocument> {
 
     private String id;
     private String nombre;
     private String titulacionOficial;
     private String pais;
 
-    public ClienteDocumentDTO() {
+    public CustomerDocumentDTO() {
     }
 
     public void setId(String id) {
@@ -41,7 +40,7 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
     }
 
     @Override
-    public void actualizarDTO(ClienteDocument cliente) {
+    public void actualizarDTO(CustomerDocument cliente) {
         this.id = cliente.getId();
         this.pais = cliente.getCountry();
         this.nombre = cliente.getName();
@@ -49,7 +48,7 @@ public class ClienteDocumentDTO implements IArqDTO<String, ClienteDocument> {
     }
 
     @Override
-    public void actualizarEntidad(ClienteDocument cliente) {
+    public void actualizarEntidad(CustomerDocument cliente) {
         cliente.setName(this.nombre);
         cliente.setOfficial(this.titulacionOficial);
         cliente.setCountry(this.pais);

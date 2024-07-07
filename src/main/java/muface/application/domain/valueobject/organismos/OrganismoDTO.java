@@ -2,14 +2,11 @@ package muface.application.domain.valueobject.organismos;
 
 import lombok.Data;
 import muface.application.domain.model.IOrganismo;
-import muface.arch.command.IArqDTO;
-import org.springframework.stereotype.Component;
+import muface.arch.command.ArqAbstractDTO;
 
 import java.io.Serializable;
-
-@Component
 @Data
-public class OrganismoDTO implements IArqDTO<Serializable, IOrganismo> {
+public class OrganismoDTO extends ArqAbstractDTO<Serializable, IOrganismo> {
 
     private Long id;
     private String nombreCompleto;

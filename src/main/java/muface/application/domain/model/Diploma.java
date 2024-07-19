@@ -1,32 +1,29 @@
 package muface.application.domain.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 
-@Entity
-@Table(name = "Diploma")
+//@Entity
+@Document
 @Data
 public class Diploma implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column
     @Max(value = 999999, message = "{idCliente.max}")
     private Long idcustomer;
 
-    @Column
     @NotEmpty(message = "{nombreCliente.notnull}")
     private String name;
 
-    @Column
     private String titulo;
 
-    @Column
     private String region;
 
 }

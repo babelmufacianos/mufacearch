@@ -1,12 +1,27 @@
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+
 server:
-  port: 8080
+  port: 8081
 
 arch:
   application-id: sampleDiplomas
   event-broker-active: false
+  role-mapping-default: default-roles-mufacerealm
+  white-list: /expedientes, /expedientes/**, /diplomas, /diplomas/**, /organismos, /organismos/**, /actuator/health/readiness, /actuator/health/liveness, /v3/api-docs/**
+
 
 spring:
   mandatory-file-encoding: UTF-8
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/mufacerealm
+          jwk-set-uri: http://localhost:8080/realms/mufacerealm/protocol/openid-connect/certs
 
   # diplomas bbdd
   datasource:
@@ -24,9 +39,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.H2Dialect
 
   # clientes bbdd
   data:
@@ -59,9 +74,9 @@ spring:
 auditoria:
   data:
     mongodb:
-      host: 192.168.1.68
+      host: localhost
       port: 27017
-      uri: mongodb://test:test@192.168.1.68:27017/auditDB
+      uri: mongodb://localhost:27017/auditDB
       database: auditDB
 
     sql:
@@ -74,20 +89,3 @@ auditoria:
       properties:
         hibernate:
           format_sql: true
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost/realms/diploma-realm
-          jwk-set-uri: http://localhost/realms/diploma-realm/protocol/openid-connect/certs
-
-# escuchando en el puerto 80 en el contenedor docker de keycloak
-keycloak:
-  realm: diploma-realm
-  auth-server-url: http://localhost/auth
-  resource: spring-boot-client
-  credentials:
-    secret: dgeTtq0crVJsoNWXv0ydcPnepJwzlDZj
-  principal-attribute: usertest
-  use-resource-role-mappings: true

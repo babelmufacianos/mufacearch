@@ -9,6 +9,7 @@ import muface.arch.exceptions.NotExistException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Pageable;
@@ -63,8 +64,10 @@ public class ArqUseCaseAspect {
 
         // Aplicar el mapeo HTTP dinamicamente (Simulado aqui, en realidad no se puede aplicar dinamicamente)
         applyHttpMapping(method, useCaseType);
-        Object useCase = applicationContext.getBean(useCaseValue.substring(0,1).toLowerCase() + useCaseValue.substring(1));
-        if (useCase == null) {
+        Object useCase = null;
+        try {
+            useCase = applicationContext.getBean(useCaseValue.substring(0, 1).toLowerCase() + useCaseValue.substring(1));
+        } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
             throw new RuntimeException("El caso de Uso <" + useCaseValue + "> no existe");
         }
 

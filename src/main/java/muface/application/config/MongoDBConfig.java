@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoRepositories(
-        basePackages = "muface.application.domain.repository.customers",
+        basePackages = "muface.application.domain.repository",
         mongoTemplateRef = "bdMongoTemplate"
 )
 public class MongoDBConfig extends ArqMongoDBConfig {

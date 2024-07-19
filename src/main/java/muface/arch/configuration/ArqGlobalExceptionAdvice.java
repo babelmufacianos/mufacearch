@@ -37,6 +37,11 @@ public class ArqGlobalExceptionAdvice {
         return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(ClassCastException.class)
+    public ResponseEntity<String> handleClassCastException(ClassCastException ex) {
+        return new ResponseEntity<>(ex.getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(NotExistException.class)
     public ResponseEntity<String> handleNotExistException(NotExistException ex) {
 

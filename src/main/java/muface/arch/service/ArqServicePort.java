@@ -5,20 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public interface ArqServicePort<D extends IArqDTO, ID> {
+public interface ArqServicePort<D extends IArqDTO> {
 
     D insertar(D entity);
 
     D actualizar(D entity) throws NoSuchMethodException;
 
-    D buscarPorId(ID id);
+    D buscarPorId(Serializable id);
 
-    List<D> buscarPorIds(List<ID> ids);
+    List<D> buscarPorIds(List<Serializable> ids);
 
-    String borrarEntidad(ID id);
+    String borrarEntidad(Serializable id);
     String borrarEntidad(D entity);
 
     String borrarEntidades(D filter);

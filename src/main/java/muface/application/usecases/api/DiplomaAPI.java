@@ -1,11 +1,13 @@
 package muface.application.usecases.api;
 
-import muface.application.domain.valueobject.diplomas.DiplomaDTO;
+import muface.application.domain.valueobject.DiplomaDTO;
 import muface.arch.aspect.ArqUseCaseDefinition;
 import muface.arch.aspect.ArqUseCaseType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.Serializable;
 
 @RestController
 @RequestMapping(value = "diplomas")
@@ -31,13 +33,13 @@ public class DiplomaAPI {
 
     @ArqUseCaseDefinition(value = "BorrarDiplomaPorIdUseCase", type = ArqUseCaseType.DELETE_BY_ID)
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> borrarPorId(@PathVariable Long id) {
+    public ResponseEntity<Object> borrarPorId(@PathVariable Serializable id) {
         return ResponseEntity.ok("");
     }
 
     @ArqUseCaseDefinition(value = "ConsultaPorIdDiplomasUseCase", type = ArqUseCaseType.QUERY_BY_ID)
     @GetMapping("{id}")
-    public ResponseEntity<Object> consultaPorId(@PathVariable Long id) {
+    public ResponseEntity<Object> consultaPorId(@PathVariable Serializable id) {
         return ResponseEntity.ok("");
     }
 
